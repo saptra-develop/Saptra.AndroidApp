@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/itmHome"
+            android:title="@string/str_home"
+            android:icon="@drawable/ic_home"></item>
+        <item
+            android:id="@+id/itmDonwload"
+            android:title="@string/str_descargar"
+            android:icon="@drawable/ic_cloud"></item>
+        <item
+            android:id="@+id/itmPlaneacion"
+            android:title="@string/str_planeacion"
+            android:icon="@drawable/ic_date"></item>
+        <item
+            android:id="@+id/itmConsultar"
+            android:title="@string/str_consultar"
+            android:icon="@drawable/ic_search"></item>
+        <item
+            android:id="@+id/itmSalir"
+            android:title="@string/str_salir"
+            android:icon="@drawable/ic_exit"></item>
+    </group>
+</menu>

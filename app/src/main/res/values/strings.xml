@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">SAPTRA</string>
+
+    <!--Menu SideBar-->
+    <string name="str_home">Inicio</string>
+    <string name="str_descargar">Descargar</string>
+    <string name="str_planeacion">Planeación</string>
+    <string name="str_consultar">Consultar</string>
+    <string name="str_salir">Salir</string>
+
+    <!--Home Activity-->
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
