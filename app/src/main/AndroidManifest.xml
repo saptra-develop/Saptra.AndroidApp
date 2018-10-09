@@ -18,7 +18,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Base">
-        <activity android:name=".Controller.ReadBarCodeActivity">
+        <activity android:name=".Controller.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +31,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name=".Controller.LoginActivity"
+            android:name=".Controller.ReadBarCodeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity android:name=".Controller.HomeActivity" />
