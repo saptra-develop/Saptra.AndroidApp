@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="190dp"
     android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:background="@drawable/grd_background_blue1">
 
        <de.hdodenhof.circleimageview.CircleImageView
            xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,7 +20,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:background="@color/colorAccent"
+        android:background="@drawable/grd_background_orange"
         android:layout_alignParentBottom="true"
         />
 

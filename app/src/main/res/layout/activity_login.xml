@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:cardCornerRadius="10dp"
-            app:cardBackgroundColor="@color/md_grey_200"
+            app:cardBackgroundColor="@color/md_grey_50"
             android:elevation="100dp"
             app:cardUseCompatPadding="true"
             app:cardElevation="4dp">
@@ -69,33 +69,22 @@
                 </android.support.design.widget.TextInputLayout>
 
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cardView"
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    app:cardBackgroundColor="@color/colorAccent"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="8dp">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/textView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:text="Iniciar sesión"
-                            android:textColor="#fff"
-                            android:textSize="18sp" />
-                    </RelativeLayout>
-                </android.support.v7.widget.CardView>
-
-
-
-
-
+                    android:text="Iniciar sesión"
+                    android:textColor="@color/md_white_1000"
+                    android:background="@drawable/shape_button"
+                    app:rd_enable="true"
+                    app:cornerRadius="20dp"
+                    app:rd_topLeftCornerRadius="20dp"
+                    app:rd_topRightCornerRadius="20dp"
+                    app:rd_bottomLeftCornerRadius="20dp"
+                    app:rd_bottomRightCornerRadius="20dp"
+                    app:rd_backgroundColor="@color/azul_gto"
+                    app:rd_maxRippleRadius="600dp"
+                    app:rd_delayClick="afterRelease"/>
 
             </LinearLayout>
 

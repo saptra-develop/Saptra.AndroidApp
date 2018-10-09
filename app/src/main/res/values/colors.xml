@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">@color/azul_1</color>
+    <color name="colorPrimaryDark">@color/azul_2</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!--Inaeba colors-->
+    <color name="cyan_gto">#00A6E3</color>
+    <color name="azul_gto">#004A80</color>
+    <color name="azul_1">#2F8CE1</color>
+    <color name="azul_2">#2461AB</color>
+
+    <color name="verde_gto">#8BC53F</color>
+    <color name="magenta_gto">#E6358A</color>
+    <color name="naranja_gto">#F27321</color>
+
+    <color name="gris_1">#E6E6E6</color>
+    <color name="gris_2">#6A6A6A</color>
+    <color name="azul_tabla_1">#d9f2fb</color>
+    <color name="azul_tabla_2">#bfe9f7</color>
 
     <!--reds-->
     <color name="md_red_50">#FFEBEE</color>
