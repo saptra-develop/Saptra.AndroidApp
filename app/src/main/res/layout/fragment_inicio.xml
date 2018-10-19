@@ -48,19 +48,19 @@
                         android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/txvNombre"
-                        android:text="Juan Perex"
+                        android:text="Juan Perez"
                         android:layout_column="1"
                         android:padding="8dp"/>
                 </TableRow>
                 <TableRow>
                     <TextView
-                        android:text="RFC:"
+                        android:text="Email:"
                         android:layout_column="0"
                         android:padding="8dp"
                         android:textStyle="bold"/>
                     <TextView
                         android:id="@+id/txvRfc"
-                        android:text="ABCD000000123"
+                        android:text="correo@mail.com"
                         android:layout_column="1"
                         android:padding="8dp"/>
                 </TableRow>

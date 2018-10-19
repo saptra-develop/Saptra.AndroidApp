@@ -22,13 +22,13 @@ import retrofit2.http.Url;
 public interface ServiceApi {
 
     //WebApi
-    //public static final String BASE_URL = "http://api.impulsomonterrey.com";
+    public static final String BASE_URL = "http://apisaptra.gear.host/";
 
     //virtual device
     //public static final String BASE_URL = "http://192.168.226.2:45455/";
 
     //physical device
-    public static final String BASE_URL = "http://localhost:57680/";
+    //public static final String BASE_URL = "http://localhost:57680/";
 
     //mUsuarios
     @POST("Saptra/Usuario/GetLogin")

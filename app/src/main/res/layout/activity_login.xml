@@ -71,7 +71,7 @@
                         android:layout_height="wrap_content"
                         android:hint="Contraseña"
                         android:drawableLeft="@drawable/ic_key"
-                        android:inputType="textPersonName" />
+                        android:inputType="textPassword" />
 
 
                 </android.support.design.widget.TextInputLayout>
