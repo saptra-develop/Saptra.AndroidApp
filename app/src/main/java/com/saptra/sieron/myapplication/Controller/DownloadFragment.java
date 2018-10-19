@@ -1,16 +1,56 @@
 package com.saptra.sieron.myapplication.Controller;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.dd.CircularProgressButton;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.rey.material.widget.ImageButton;
+import com.saptra.sieron.myapplication.Data.cPeriodosData;
+import com.saptra.sieron.myapplication.Data.dDetallePlanSemanalData;
+import com.saptra.sieron.myapplication.Data.mPlanSemanalData;
+import com.saptra.sieron.myapplication.Models.HttpListResponse;
+import com.saptra.sieron.myapplication.Models.cPeriodos;
+import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
+import com.saptra.sieron.myapplication.Models.mPlanSemanal;
 import com.saptra.sieron.myapplication.R;
+import com.saptra.sieron.myapplication.Utils.Globals;
+import com.saptra.sieron.myapplication.Utils.Interfaces.RecyclerViewClickListener;
+import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
+import com.saptra.sieron.myapplication.Widgets.SelectListActivity;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.app.Activity.RESULT_OK;
 
 public class DownloadFragment extends Fragment {
 
-    CircularProgressButton btnDownload;
+    TextInputLayout tilPeriodo;
+    ImageButton btnDownload;
+    private static int KEY_SELECT_LIST= 111;
+    private cPeriodos periodo;
+    private Retrofit mRestAdapter;
+    private ServiceApi InfoApi;
+
+    private ArrayList<mPlanSemanal> _pSemanal;
+    private ArrayList<dDetallePlanSemanal> _dSemanal;
+
     public DownloadFragment() {
 
     }
@@ -22,14 +62,184 @@ public class DownloadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_download, container, false);
         //Instancias
         //*********************************************
-        //btnDownload = (CircularProgressButton) view.findViewById(R.id.btnDownload);
-        /*btnDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnDownload.setIndeterminateProgressMode(true);
-            }
-        });*/
+        mRestAdapter = new Retrofit.Builder()
+                .baseUrl(ServiceApi.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        InfoApi = mRestAdapter.create(ServiceApi.class);
+        periodo = new cPeriodos();
+        _pSemanal = new ArrayList<mPlanSemanal>();
+        _dSemanal = new ArrayList<dDetallePlanSemanal>();
+        tilPeriodo = (TextInputLayout) view.findViewById(R.id.tilPeriodo);
+        btnDownload = (ImageButton) view.findViewById(R.id.btnDownload);
+
         //*********************************************
+
+        tilPeriodo.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("tilPeriodoClick", "Click");
+                Intent intent = new Intent(getActivity(), SelectListActivity.class);
+                startActivityForResult(intent, KEY_SELECT_LIST);
+            }
+        });
+
+        btnDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(periodo.getPeriodoId() == 0){
+                    Toast.makeText(getContext(),
+                            "Seleccione periodo",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(!Globals.getInstance().isOnline(getContext())){
+                    Toast.makeText(getContext(),
+                            "Sin acceso a internet",
+                            Toast.LENGTH_LONG).show();
+                    return;
+                }
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Descargar")
+                        .setMessage("Descargar información?")
+                        .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ObtenerPlanSemanal();
+                            }
+                        })
+                        .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            switch (requestCode) {
+                case 111:
+                    periodo.setPeriodoId(data.getIntExtra("PeriodoId", 0));
+                    periodo.setDecripcionPeriodo(data.getStringExtra("Periodo"));
+                    tilPeriodo.getEditText().setText(periodo.getDecripcionPeriodo());
+                    if(periodo.getPeriodoId() > 0){
+                        try {
+                            cPeriodosData.getInstance(getContext()).deletePeriodo();
+                            cPeriodosData.getInstance(getContext()).createPeriodo(periodo);
+                        }
+                        catch (Exception ex){
+                            Log.e("onActResult", "Error al insertar periodo:"+ex.getMessage());
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void ObtenerPlanSemanal(){
+        if(!Globals.getInstance().isOnline(getContext())){
+            Toast.makeText(getContext(),
+                    "Sin acceso a internet",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        try{
+            Call<HttpListResponse<mPlanSemanal>> psemanal
+                    = InfoApi.GetPlaneacionSemanal(periodo.getPeriodoId(),6);
+            psemanal.enqueue(new Callback<HttpListResponse<mPlanSemanal>>() {
+                @Override
+                public void onResponse(Call<HttpListResponse<mPlanSemanal>> call, Response<HttpListResponse<mPlanSemanal>> response) {
+                    if(response.isSuccessful()){
+                        //Si respuesta correcta, obener datos
+                        String data = new Gson().toJson(response.body().getDatos());
+                        Log.e("DATA", data);
+                        if(response.body().getDatos().size() > 0){
+                            mPlanSemanalData.getInstance(getContext()).deletePlanSemanal();
+                            for(mPlanSemanal obj : response.body().getDatos()){
+                                mPlanSemanalData.getInstance(getContext())
+                                        .createPlanSemanal(obj);
+                            }
+                            ObtenerDetallePlanSemanal();
+                        }
+                        else{
+                            Log.e("IF_ObtenerPlanSemanal", "Sin información");
+                            Toast.makeText(getContext(),
+                                    "Información no disponible",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<HttpListResponse<mPlanSemanal>> call, Throwable t) {
+                    Log.e("@_ObtenerPlanSemanal", "error: "+t.getMessage());
+                    Toast.makeText(getContext(),
+                            "Error al intentar descargar",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            Log.e("ObtenerPlanSemanal", ex.getMessage());
+        }
+    }
+
+    private void ObtenerDetallePlanSemanal(){
+        if(!Globals.getInstance().isOnline(getContext())){
+            Toast.makeText(getContext(),
+                    "Sin acceso a internet",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+        try{
+            Call<HttpListResponse<dDetallePlanSemanal>> dsemanal
+                    = InfoApi.GetDetallePlaneacionSemanal(periodo.getPeriodoId(),6);
+            dsemanal.enqueue(new Callback<HttpListResponse<dDetallePlanSemanal>>() {
+                @Override
+                public void onResponse(Call<HttpListResponse<dDetallePlanSemanal>> call, Response<HttpListResponse<dDetallePlanSemanal>> response) {
+                    if(response.isSuccessful()){
+                        //Si respuesta correcta, obener datos
+                        String data = new Gson().toJson(response.body().getDatos());
+                        Log.e("DATA", data);
+                        if(response.body().getDatos().size() > 0){
+                            dDetallePlanSemanalData.getInstance(getContext()).deleteDetallePlanSemanal();
+                            for(dDetallePlanSemanal obj : response.body().getDatos()){
+                                dDetallePlanSemanalData.getInstance(getContext())
+                                        .createDetallePlanSemanal(obj);
+                            }
+                            Toast.makeText(getContext(),
+                                    "La descarga finalizó con éxito",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Log.e("IF_ObtenerDetPlanSem", "Sin información");
+                            Toast.makeText(getContext(),
+                                    "Información no disponible",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<HttpListResponse<dDetallePlanSemanal>> call, Throwable t) {
+                    Log.e("@_ObtenerDetPlanSem", "error: "+t.getMessage());
+                    Toast.makeText(getContext(),
+                            "Error al intentar descargar",
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            Log.e("ObtenerDetPlanSem", "Error:"+ex.getMessage());
+        }
     }
 }

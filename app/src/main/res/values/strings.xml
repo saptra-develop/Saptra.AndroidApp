@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">SAPTRA</string>
 
+    <!--SharedPreferences-->
+    <string name="SATRA_PREFERENCES">SP_SAPTRA</string>
+    <string name="sp_UsuarioId">UsuarioId</string>
+    <string name="sp_NombresUsuario">NombresUsuario</string>
+    <string name="sp_ApellidosUsuario">ApellidosUsuario</string>
+    <string name="sp_RolUsuario">RolUsuario</string>
+    <string name="sp_EmailUsuario">EmailUsuario</string>
+    <string name="sp_Logged">Logged</string>
+
     <!--Menu SideBar-->
     <string name="str_home">Inicio</string>
     <string name="str_descargar">Descargar</string>
@@ -13,8 +22,8 @@
     <string name="drawer_close">Close</string>
 
     <!--Download button-->
-    <string name="complete_text">Open</string>
-    <string name="error_text">Close</string>
-    <string name="upload_text">Close</string>
+    <string name="Upload">Upload</string>
+    <string name="Error">Error</string>
+    <string name="Complete">Complete</string>
 
 </resources>

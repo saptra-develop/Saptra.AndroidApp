@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grd_background_grey"
     tools:context=".Controller.LoginActivity">
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:indeterminate="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -61,30 +69,22 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Usuario"
-                        android:drawableLeft="@drawable/ic_person"
+                        android:hint="Contraseña"
+                        android:drawableLeft="@drawable/ic_key"
                         android:inputType="textPersonName" />
 
 
                 </android.support.design.widget.TextInputLayout>
-
 
                 <com.rey.material.widget.Button
                     android:id="@+id/btnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:text="Iniciar sesión"
-                    android:textColor="@color/md_white_1000"
-                    android:background="@drawable/shape_button"
                     app:rd_enable="true"
-                    app:cornerRadius="20dp"
-                    app:rd_topLeftCornerRadius="20dp"
-                    app:rd_topRightCornerRadius="20dp"
-                    app:rd_bottomLeftCornerRadius="20dp"
-                    app:rd_bottomRightCornerRadius="20dp"
-                    app:rd_backgroundColor="@color/azul_gto"
-                    app:rd_maxRippleRadius="600dp"
-                    app:rd_delayClick="afterRelease"/>
+                    style="@style/GtoButton"
+                    app:rd_style="@style/btnLoginStyle"
+                    />
 
             </LinearLayout>
 
@@ -93,4 +93,13 @@
 
     </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clMensajes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

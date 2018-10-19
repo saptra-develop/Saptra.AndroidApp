@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">@color/azul_2</color>
     <color name="colorAccent">#D81B60</color>
 
+    <!--semitransparent-->
+    <color name="semitransparent">#9A000000</color>
+
     <!--Inaeba colors-->
     <color name="cyan_gto">#00A6E3</color>
     <color name="azul_gto">#004A80</color>

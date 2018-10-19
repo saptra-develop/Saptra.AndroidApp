@@ -1,7 +1,10 @@
 package com.saptra.sieron.myapplication.Controller;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +14,9 @@ import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -22,6 +28,11 @@ import com.saptra.sieron.myapplication.R;
 import java.io.IOException;
 
 public class ReadBarCodeActivity extends AppCompatActivity {
+
+    //For scan animation
+    ObjectAnimator animator;
+    View scannerLayout;
+    View scannerBar;
 
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
@@ -35,9 +46,48 @@ public class ReadBarCodeActivity extends AppCompatActivity {
         super.onCreate(icicle);
         setContentView(R.layout.activity_read_bar_code);
 
+        //Scanner overlay
+        scannerLayout = findViewById(R.id.scannerLayout);
+        scannerBar = findViewById(R.id.scannerBar);
+
+        animator = null;
+
+        ViewTreeObserver vto = scannerLayout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                scannerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    scannerLayout.getViewTreeObserver().
+                            removeGlobalOnLayoutListener(this);
+
+                } else {
+                    scannerLayout.getViewTreeObserver().
+                            removeOnGlobalLayoutListener(this);
+                }
+
+                float destination = (float)(scannerLayout.getY() +
+                        scannerLayout.getHeight());
+
+                animator = ObjectAnimator.ofFloat(scannerBar, "translationY",
+                        scannerLayout.getY(),
+                        destination);
+
+                animator.setRepeatMode(ValueAnimator.REVERSE);
+                animator.setRepeatCount(ValueAnimator.INFINITE);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(2000);
+                animator.start();
+
+            }
+        });
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
         }
+
+
 
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         barcodeValue = (TextView) findViewById(R.id.barcode_value);

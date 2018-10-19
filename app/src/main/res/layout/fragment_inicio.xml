@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Controller.InicioFragment">
+    tools:context=".Controller.InicioFragment"
+    android:background="@drawable/grd_background_grey">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="" />
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
-</FrameLayout>
+        <LinearLayout
+            android:id="@+id/lytInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shape_card_body"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:background="@drawable/shape_card_header"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre TIpo Figura"
+                    android:textColor="@color/md_white_1000"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:text="Nombre:"
+                        android:layout_column="0"
+                        android:padding="8dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/txvNombre"
+                        android:text="Juan Perex"
+                        android:layout_column="1"
+                        android:padding="8dp"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:text="RFC:"
+                        android:layout_column="0"
+                        android:padding="8dp"
+                        android:textStyle="bold"/>
+                    <TextView
+                        android:id="@+id/txvRfc"
+                        android:text="ABCD000000123"
+                        android:layout_column="1"
+                        android:padding="8dp"/>
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:src="@drawable/ic_profile"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

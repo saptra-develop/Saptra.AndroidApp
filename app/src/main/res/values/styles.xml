@@ -40,4 +40,27 @@
              colorControlHighlight & colorSwitchThumbNormal. -->
     </style>
 
+    <style name="GtoButton">
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:textColor">@color/md_white_1000</item>
+    </style>
+
+    <style name="btnLoginStyle">
+        <item name="rd_rippleType">wave</item>
+        <item name="rd_delayClick">afterRelease</item>
+        <item name="rd_backgroundColor">@color/azul_gto</item>
+        <item name="rd_topLeftCornerRadius">20dp</item>
+        <item name="rd_topRightCornerRadius">20dp</item>
+        <item name="rd_bottomLeftCornerRadius">20dp</item>
+        <item name="rd_bottomRightCornerRadius">20dp</item>
+    </style>
+
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>-->
+    </style>
+
+
 </resources>
