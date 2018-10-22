@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/file/ic_cloud_download_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_today_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,12 +33,11 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="fdfdfd" />
-                            <entry key="height" value="128" />
-                            <entry key="outputName" value="ic_cloud" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="opacityPercent" value="40" />
+                            <entry key="outputName" value="ic_day" />
                             <entry key="overrideSize" value="true" />
                             <entry key="sourceFile" value="C:\Users\Administrador" />
-                            <entry key="width" value="128" />
                           </map>
                         </option>
                       </PersistentState>

@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/azul_1</color>
-    <color name="colorPrimaryDark">@color/azul_2</color>
+    <color name="colorPrimary">@color/azul_gto</color>
+    <color name="colorPrimaryDark">@color/azul_1</color>
     <color name="colorAccent">#D81B60</color>
 
     <!--semitransparent-->
     <color name="semitransparent">#9A000000</color>
+    
+    <!--arraycolor-->
+    <array name="a_colors">
+        <item>@color/magenta_gto</item>
+        <item>@color/azul_1</item>
+        <item>@color/naranja_gto</item>
+        <item>@color/azul_gto</item>
+    </array>
 
     <!--Inaeba colors-->
     <color name="cyan_gto">#00A6E3</color>

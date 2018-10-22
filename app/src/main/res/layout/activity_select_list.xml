@@ -7,7 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Widgets.SelectListActivity">
+    tools:context=".Widgets.SelectListActivity"
+    android:gravity="center">
+
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/pvProgress"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        app:pv_autostart="true"
+        app:pv_circular="true"
+        app:pv_progressMode="indeterminate"
+        app:pv_progressStyle="@style/CircularProgressView"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvwSelectList"
@@ -17,6 +28,7 @@
         android:layout_weight="1"/>
 
     <RelativeLayout
+        android:id="@+id/rlCancelar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
@@ -34,5 +46,13 @@
             />
 
     </RelativeLayout>
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clMensajes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
 </LinearLayout>

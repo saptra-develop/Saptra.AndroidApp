@@ -18,7 +18,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Base">
-        <activity android:name=".Controller.SplashActivity">
+        <activity android:name=".Controller.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,13 +31,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name=".Controller.HomeActivity"
+            android:name=".Controller.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity android:name=".Controller.ReadBarCodeActivity" />
         <activity android:name=".Controller.ScanActivity" />
-        <activity android:name=".Widgets.SelectListActivity"
-            android:theme="@style/MyDialogTheme"/>
+        <activity
+            android:name=".Widgets.SelectListActivity"
+            android:theme="@style/MyDialogTheme" />
+        <activity android:name=".Controller.CheckInActivity"></activity>
     </application>
 
 </manifest>

@@ -34,14 +34,15 @@
 
         <com.rey.material.widget.ImageButton
             android:id="@+id/btnDownload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@drawable/ic_cloud"
             android:padding="16dp"
             android:layout_centerInParent="true"
-            android:background="@color/verde_gto"
+            android:background="@drawable/shape_button_download"
             app:rd_enable="true"
-            app:rd_rippleType="wave"/>
+            app:rd_style="@style/DownloadBtnStyle"
+            android:elevation="4dp"/>
 
     </RelativeLayout>
 

@@ -40,10 +40,10 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
     public void onBindViewHolder(final PlaneacionListViewHolder holder, final int position){
         Log.d("TRANCER", "en onBindViewHolder**");
         //BIND DATA
-        holder.txvPeriodo.setText(lstDetPlanSem.get(position).getDescripcionActividad()+"TEST");
-        holder.txvActividad.setText(lstDetPlanSem.get(position).getDescripcionActividad());
-        holder.txvFecha.setText(lstDetPlanSem.get(position).getFechaAcividad());
-        holder.txvHora.setText(lstDetPlanSem.get(position).getHoraActividad());
+        holder.tilActividad.getEditText().setText(lstDetPlanSem.get(position).getDescripcionActividad()+"TEST");
+        holder.tilDescripcion.getEditText().setText(lstDetPlanSem.get(position).getDescripcionActividad());
+        holder.tilFecha.getEditText().setText(lstDetPlanSem.get(position).getFechaAcividad());
+        holder.tilHora.getEditText().setText(lstDetPlanSem.get(position).getHoraActividad());
     }
 
     @Override

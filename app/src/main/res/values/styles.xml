@@ -40,12 +40,12 @@
              colorControlHighlight & colorSwitchThumbNormal. -->
     </style>
 
-    <style name="GtoButton">
+    <style name="LoginButton">
         <item name="android:background">@drawable/shape_button</item>
         <item name="android:textColor">@color/md_white_1000</item>
     </style>
 
-    <style name="btnLoginStyle">
+    <style name="LoginBtnStyle">
         <item name="rd_rippleType">wave</item>
         <item name="rd_delayClick">afterRelease</item>
         <item name="rd_backgroundColor">@color/azul_gto</item>
@@ -55,6 +55,16 @@
         <item name="rd_bottomRightCornerRadius">20dp</item>
     </style>
 
+    <style name="DownloadBtnStyle">
+        <item name="rd_rippleType">wave</item>
+        <item name="rd_delayClick">afterRelease</item>
+        <item name="android:radius">100dp</item>
+        <item name="rd_topLeftCornerRadius">200dp</item>
+        <item name="rd_topRightCornerRadius">200dp</item>
+        <item name="rd_bottomLeftCornerRadius">200dp</item>
+        <item name="rd_bottomRightCornerRadius">200dp</item>
+    </style>
+
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -62,5 +72,14 @@
         <!--<item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>-->
     </style>
 
+    <style name="CircularProgressView" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeSize">6dp</item>
+        <item name="cpd_strokeColors">@array/a_colors</item>
+        <item name="cpd_inStepColors">@array/a_colors</item>
+    </style>
+    <style name="BarProgressView" parent="Material.Drawable.CircularProgress">
+        <item name="lpd_strokeSize">6dp</item>
+        <item name="lpd_strokeColors">@array/a_colors</item>
+    </style>
 
 </resources>

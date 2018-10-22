@@ -3,15 +3,15 @@ package com.saptra.sieron.myapplication.Widgets;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
+import com.rey.material.widget.ProgressView;
 import com.saptra.sieron.myapplication.Models.HttpListResponse;
 import com.saptra.sieron.myapplication.Models.cPeriodos;
 import com.saptra.sieron.myapplication.R;
@@ -19,7 +19,6 @@ import com.saptra.sieron.myapplication.Utils.Adapters.SelectListAdapter;
 import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.RecyclerViewClickListener;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
-
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -29,10 +28,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SelectListActivity extends AppCompatActivity {
-
+    //Controls
     private RecyclerView rvwSelectList;
     private Button btnCancelar;
+    private ProgressView pvLoading;
+    private RelativeLayout rlCancelar;
 
+    //Other
     private Retrofit mRestAdapter;
     private ServiceApi InfoApi;
 
@@ -53,6 +55,9 @@ public class SelectListActivity extends AppCompatActivity {
 
         rvwSelectList = (RecyclerView) findViewById(R.id.rvwSelectList);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
+        pvLoading = (ProgressView) findViewById(R.id.pvProgress);
+        rlCancelar = (RelativeLayout) findViewById(R.id.rlCancelar);
+        ControlBehavior(false);
 
         lstPeriodo = new ArrayList<cPeriodos>();
 
@@ -62,7 +67,6 @@ public class SelectListActivity extends AppCompatActivity {
                 finish();
             }
         });
-
         ObenerPeriodosHttp();
     }
 
@@ -83,6 +87,8 @@ public class SelectListActivity extends AppCompatActivity {
                         String data = new Gson().toJson(response.body().getDatos());
                         Log.e("DATA", data);
                         if(response.body().getDatos().size() > 0){
+                            ControlBehavior(true);
+                            btnCancelar.setVisibility(View.VISIBLE);
                             //Limpiar tabla
                             lstPeriodo = (ArrayList<cPeriodos>) response.body().getDatos();
                             if(lstPeriodo.size() > 0) {
@@ -105,18 +111,26 @@ public class SelectListActivity extends AppCompatActivity {
                         }
                         else{
                             Log.e("PER-onResponse", "Sin información");
+                            ControlBehavior(true);
                         }
                     }
                 }
                 @Override
                 public void onFailure(Call<HttpListResponse<cPeriodos>> call, Throwable t) {
                     Log.e("CTL-Failure", "error: "+t.getMessage());
+                    ControlBehavior(true);
                 }
             });
         }
         catch (Exception ex){
             ex.printStackTrace();
             Log.e("getCatalogos", ex.getMessage());
+            ControlBehavior(true);
         }
+    }
+
+    private void ControlBehavior(boolean hidden){
+        pvLoading.setVisibility(hidden ? View.GONE : View.VISIBLE);
+        rlCancelar.setVisibility(!hidden ? View.GONE : View.VISIBLE);
     }
 }
