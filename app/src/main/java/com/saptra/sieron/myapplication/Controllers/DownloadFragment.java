@@ -1,13 +1,11 @@
-package com.saptra.sieron.myapplication.Controller;
+package com.saptra.sieron.myapplication.Controllers;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mPlanSemanal;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Globals;
-import com.saptra.sieron.myapplication.Utils.Interfaces.RecyclerViewClickListener;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
 import com.saptra.sieron.myapplication.Widgets.SelectListActivity;
 

@@ -1,7 +1,5 @@
-package com.saptra.sieron.myapplication.Controller;
+package com.saptra.sieron.myapplication.Controllers;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,16 +8,9 @@ import android.view.ViewGroup;
 
 import com.saptra.sieron.myapplication.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ConsultingFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ConsultingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ConsultingFragment extends Fragment {
-    public ConsultingFragment() {
+public class InicioFragment extends Fragment {
+
+    public InicioFragment() {
 
     }
 
@@ -33,4 +24,5 @@ public class ConsultingFragment extends Fragment {
         //*********************************************
         return view;
     }
+
 }

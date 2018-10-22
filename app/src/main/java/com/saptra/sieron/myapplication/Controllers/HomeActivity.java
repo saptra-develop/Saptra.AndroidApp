@@ -1,4 +1,4 @@
-package com.saptra.sieron.myapplication.Controller;
+package com.saptra.sieron.myapplication.Controllers;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;

@@ -1,4 +1,4 @@
-package com.saptra.sieron.myapplication.Controller;
+package com.saptra.sieron.myapplication.Controllers;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
