@@ -33,7 +33,7 @@ public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View view) {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
-                    planeacionViewListener.ButonClick(view, position);
+                    planeacionViewListener.ButtonClick(view, position);
                 }
             }
         });

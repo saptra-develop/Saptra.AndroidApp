@@ -17,9 +17,10 @@
             android:id="@+id/tilPeriodo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_gravity="center_vertical"
-            android:padding="16dp"
-            android:textColorHint="@color/colorAccent">
+            android:textColorHint="@color/colorAccent"
+            android:layout_margin="16dp">
 
             <EditText
                 android:layout_width="match_parent"

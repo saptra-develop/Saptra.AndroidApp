@@ -8,6 +8,7 @@
         android:value="barcode" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,7 @@
         android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.Base">
-        <activity android:name=".Controllers.HomeActivity">
+        <activity android:name=".Controllers.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,11 +28,11 @@
         </activity>
         <!-- Not main Activities -->
         <activity
-            android:name=".Controllers.LoginActivity"
+            android:name=".Controllers.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
-            android:name=".Controllers.SplashActivity"
+            android:name=".Controllers.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity android:name=".Controllers.ReadBarCodeActivity" />
@@ -39,7 +40,8 @@
         <activity
             android:name=".Widgets.SelectListActivity"
             android:theme="@style/MyDialogTheme" />
-        <activity android:name=".Controllers.CheckInActivity"></activity>
+        <activity android:name=".Controllers.CheckInActivity"
+            android:theme="@style/AppTheme.Base" />
     </application>
 
 </manifest>
