@@ -3,6 +3,7 @@ package com.saptra.sieron.myapplication.Controllers;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -141,6 +142,10 @@ public class ReadBarCodeActivity extends AppCompatActivity {
                         public void run() {
                             //Update barcode value to TextView
                             barcodeValue.setText(barcodes.valueAt(0).displayValue);
+                            Intent intent = new Intent();
+                            intent.putExtra("BarCodeRead",  barcodes.valueAt(0).displayValue);
+                            setResult(RESULT_OK, intent);
+                            finish();
                         }
                     });
                 }

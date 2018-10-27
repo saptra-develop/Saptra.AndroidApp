@@ -1,17 +1,27 @@
 package com.saptra.sieron.myapplication.Controllers;
 
+import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
 
 public class HomeActivity extends AppCompatActivity {
@@ -24,6 +34,12 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    0);
+        }
 
         //Instancias
         //*********************************************
@@ -70,6 +86,17 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //Log.e("RequestPermissionsRes", "requestCode" + requestCode);
+        if (requestCode == 0) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            }
+        }
+    }
+
     private void setupNavigationDrawerContent(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -100,6 +127,9 @@ public class HomeActivity extends AppCompatActivity {
                             tlbHome.setSubtitle(R.string.str_consultar);
                             drlHome.closeDrawer(GravityCompat.START);
                             return  true;
+                        case R.id.itmSalir:
+                            CloseSession();
+                            break;
                     }
                     return false;
                 }
@@ -141,7 +171,28 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void CloseApp(){
-
+    private void CloseSession(){
+        new AlertDialog.Builder(this)
+                .setTitle("AVISO")
+                .setMessage("Se cerrará la sesión actual. Continuar?")
+                .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String sharedPreferences = getResources().getString(R.string.SATRA_PREFERENCES);
+                        SharedPreferences settings = getApplication()
+                                .getSharedPreferences(sharedPreferences, getApplication().MODE_PRIVATE);
+                        settings.edit().clear().commit();
+                        Intent intent = new Intent(getApplication(), LoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .show();
     }
 }

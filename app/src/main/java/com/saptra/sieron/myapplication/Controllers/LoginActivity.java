@@ -188,7 +188,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.putInt(getString(R.string.sp_UsuarioId), usuario.getUsuarioId());
         editor.putString(getString(R.string.sp_ApellidosUsuario), usuario.getNombresUsuario());
         editor.putString(getString(R.string.sp_EmailUsuario), usuario.getEmailUsuario());
-        editor.putString(getString(R.string.sp_RolUsuario), usuario.getRoles().getNombreRol());
+        editor.putString(getString(R.string.sp_TipoFigura), usuario.getTipoFiguras().getDescripcionTipoFigura());
         editor.putBoolean(getString(R.string.sp_Logged), true);
         editor.commit();
     }

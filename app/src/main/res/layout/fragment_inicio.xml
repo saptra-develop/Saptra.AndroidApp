@@ -30,6 +30,7 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/txvTipoFigura"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre TIpo Figura"
@@ -50,7 +51,10 @@
                         android:id="@+id/txvNombre"
                         android:text="Juan Perez"
                         android:layout_column="1"
-                        android:padding="8dp"/>
+                        android:padding="8dp"
+                        android:maxLines="2"
+                        android:lines="2"
+                        android:gravity="center_vertical"/>
                 </TableRow>
                 <TableRow>
                     <TextView
@@ -59,10 +63,13 @@
                         android:padding="8dp"
                         android:textStyle="bold"/>
                     <TextView
-                        android:id="@+id/txvRfc"
+                        android:id="@+id/txvEmail"
                         android:text="correo@mail.com"
                         android:layout_column="1"
-                        android:padding="8dp"/>
+                        android:padding="8dp"
+                        android:maxLines="2"
+                        android:lines="2"
+                        android:gravity="center_vertical"/>
                 </TableRow>
             </TableLayout>
 

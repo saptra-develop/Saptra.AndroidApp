@@ -40,7 +40,7 @@ public class DownloadFragment extends Fragment {
 
     TextInputLayout tilPeriodo;
     ImageButton btnDownload;
-    private static int KEY_SELECT_LIST= 111;
+    private static final int KEY_SELECT_LIST = 111;
     private cPeriodos periodo;
     private Retrofit mRestAdapter;
     private ServiceApi InfoApi;
@@ -122,7 +122,7 @@ public class DownloadFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             switch (requestCode) {
-                case 111:
+                case KEY_SELECT_LIST:
                     periodo.setPeriodoId(data.getIntExtra("PeriodoId", 0));
                     periodo.setDecripcionPeriodo(data.getStringExtra("Periodo"));
                     tilPeriodo.getEditText().setText(periodo.getDecripcionPeriodo());

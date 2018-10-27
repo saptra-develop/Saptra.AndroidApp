@@ -9,12 +9,12 @@ public class mUsuarios {
     private String PasswordUsuario;
     private String NombresUsuario;
     private String ApellidosUsuario;
-    private mRoles Roles;
-    private String EmailUsuario;
     private cTipoFiguras cTipoFiguras1;
+    private String EmailUsuario;
 
     public mUsuarios(){
-        Roles = new mRoles();
+        UsuarioId = 0;
+        EstatusId = 0;
         cTipoFiguras1 = new cTipoFiguras();
     }
 
@@ -22,40 +22,40 @@ public class mUsuarios {
         return UsuarioId;
     }
 
-    public void setUsuarioId(int usuarioId) {
-        UsuarioId = usuarioId;
+    public void setUsuarioId(int UsuarioId) {
+        this.UsuarioId = UsuarioId;
     }
 
     public String getFechaCreacion() {
         return FechaCreacion;
     }
 
-    public void setFechaCreacion(String fechaCreacion) {
-        FechaCreacion = fechaCreacion;
+    public void setFechaCreacion(String FechaCreacion) {
+        this.FechaCreacion = FechaCreacion;
     }
 
     public int getEstatusId() {
         return EstatusId;
     }
 
-    public void setEstatusId(int estatusId) {
-        EstatusId = estatusId;
+    public void setEstatusId(int EstatusId) {
+        this.EstatusId = EstatusId;
     }
 
     public String getLoginUsuario() {
         return LoginUsuario;
     }
 
-    public void setLoginUsuario(String loginUsuario) {
-        LoginUsuario = loginUsuario;
+    public void setLoginUsuario(String LoginUsuario) {
+        this.LoginUsuario = LoginUsuario;
     }
 
     public String getPasswordUsuario() {
         return PasswordUsuario;
     }
 
-    public void setPasswordUsuario(String passwordUsuario) {
-        PasswordUsuario = passwordUsuario;
+    public void setPasswordUsuario(String PasswordUsuario) {
+        this.PasswordUsuario = PasswordUsuario;
     }
 
     public String getNombresUsuario() {
@@ -70,24 +70,16 @@ public class mUsuarios {
         return ApellidosUsuario;
     }
 
-    public void setApellidosUsuario(String apellidosUsuario) {
-        ApellidosUsuario = apellidosUsuario;
-    }
-
-    public mRoles getRoles() {
-        return Roles;
-    }
-
-    public void setRoles(mRoles mRoles) {
-        Roles = Roles;
+    public void setApellidosUsuario(String ApellidosUsuario) {
+        this.ApellidosUsuario = ApellidosUsuario;
     }
 
     public String getEmailUsuario() {
         return EmailUsuario;
     }
 
-    public void setEmailUsuario(String emailUsuario) {
-        EmailUsuario = emailUsuario;
+    public void setEmailUsuario(String EmailUsuario) {
+        this.EmailUsuario = EmailUsuario;
     }
 
     public cTipoFiguras getTipoFiguras() {

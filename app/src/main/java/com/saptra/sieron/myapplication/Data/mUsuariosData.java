@@ -35,7 +35,7 @@ public class mUsuariosData {
     /***************************************************************************
      * CREATE_PERIODO
      ***************************************************************************/
-    public long createUsuario(mUsuarios usuario) {
+    /*public long createUsuario(mUsuarios usuario) {
         long IdUsuario = 0;
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -45,7 +45,7 @@ public class mUsuariosData {
         values.put(dbh.USR_LOGIN_USUARIO, usuario.getLoginUsuario());
         values.put(dbh.USR_NOMBRES_USUARIO, usuario.getNombresUsuario());
         values.put(dbh.USR_APELLIDOS_USUARIO, usuario.getApellidosUsuario());
-        values.put(dbh.USR_ROL_ID, usuario.getRoles().getRolId());
+        values.put(dbh.USR_ROL_ID, usuario.getTipoFiguras().());
         values.put(dbh.USR_ESTATUS_ID, usuario.getUsuarioId());
         //values.put(dbh.USR_IMAGEN_USUARIO, usuario.getimagen);
         values.put(dbh.USR_EMAIL_USUARIO, usuario.getEmailUsuario());
@@ -55,7 +55,7 @@ public class mUsuariosData {
         db.close();
         Log.e("DBH-createUsuario", "Id:"+IdUsuario);
         return IdUsuario;
-    }
+    }*/
 
     /***************************************************************************
      * DELETE USUARIO
