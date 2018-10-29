@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -20,9 +21,13 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
+import com.saptra.sieron.myapplication.Utils.Globals;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -35,10 +40,33 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
+        /*if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     0);
+        }*/
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            boolean allPermissionsGranted = true;
+            ArrayList<String> toRequestPermissions = new ArrayList<>();
+
+            for(String permission : Globals.REQUIRED_PERMISSIONS){
+                if(ContextCompat.checkSelfPermission(this, permission) !=
+                        PackageManager.PERMISSION_GRANTED){
+                    toRequestPermissions.add(permission);
+                    allPermissionsGranted = false;
+                }
+            }
+            if(allPermissionsGranted) {
+                Toast.makeText(this,
+                        "Todos los permisos asignados",
+                        Toast.LENGTH_LONG).show();
+            }
+            else {
+                ActivityCompat.requestPermissions(this,
+                        toRequestPermissions.toArray(new String[toRequestPermissions.size()]),
+                        Globals.REQUIRED_PERMISSIONS_CODE);
+            }
         }
 
         //Instancias
@@ -76,6 +104,27 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == Globals.REQUIRED_PERMISSIONS_CODE) {
+            boolean allPermGranted = true;
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(
+                            this,
+                            "Permissions not granted: " + permissions[i],
+                            Toast.LENGTH_LONG).show();
+                    allPermGranted = false;
+                    finish();
+                    break;
+                }
+            }
+            /*if (allPermGranted)
+                handleWriteSettingsPermission();*/
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int Id = item.getItemId();
         switch (Id){
@@ -84,17 +133,6 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //Log.e("RequestPermissionsRes", "requestCode" + requestCode);
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            }
-        }
     }
 
     private void setupNavigationDrawerContent(NavigationView navigationView){

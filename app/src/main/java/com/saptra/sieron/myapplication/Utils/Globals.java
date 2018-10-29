@@ -1,5 +1,6 @@
 package com.saptra.sieron.myapplication.Utils;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -9,6 +10,15 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Globals {
+    //Globals
+    public static String[] REQUIRED_PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    }; //TODO You can Add multiple permissions here.
+    public static final int REQUIRED_PERMISSIONS_CODE = 800;
+    private Context context;
     public static Globals instance;
 
     //Constructor

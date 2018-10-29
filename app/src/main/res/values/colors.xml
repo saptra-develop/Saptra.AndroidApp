@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">@color/azul_gto</color>
     <color name="colorPrimaryDark">@color/azul_1</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@color/azul_1</color>
 
     <!--semitransparent-->
     <color name="semitransparent">#9A000000</color>

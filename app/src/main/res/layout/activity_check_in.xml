@@ -9,394 +9,325 @@
     android:orientation="vertical"
     tools:context=".Controllers.CheckInActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/ablToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tlbCheckIn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/grd_background_toolbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            android:elevation="20dp">
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nsNestedPrincipal"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:orientation="vertical"
+        android:background="@color/gris_1">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/ablToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:layout_alignParentTop="true">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tlbCheckIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/grd_background_toolbar"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:elevation="20dp">
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsNestedPrincipal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="8dp"
+                    card_view:cardCornerRadius="10dp">
+
+                    <android.support.design.widget.CoordinatorLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:elevation="8dp">
+
+                        <LinearLayout
+                            android:id="@+id/llyActividad"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:id="@+id/llyHeader"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/shape_card_header"
+                                android:gravity="center"
+                                android:padding="8dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nombre Actividad"
+                                    android:lines="2"
+                                    android:maxLines="3"
+                                    android:textColor="@color/cpb_white"
+                                    android:gravity="center_vertical"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/llyBody"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                app:layout_anchor="@+id/llyHeader"
+                                android:padding="8dp">
+
+                                <TableLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/azul_tabla_1">
+
+                                    <TableRow
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:paddingBottom="8dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Periodo:"
+                                            android:drawableLeft="@drawable/ic_date"
+                                            android:textColor="@color/azul_gto"
+                                            android:textStyle="bold"
+                                            android:layout_column="0"/>
+
+                                        <TextView
+                                            android:id="@+id/txvPeriodo"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Nombre Periodo"
+                                            android:textColor="@color/gris_2"
+                                            android:layout_column="1"
+                                            android:layout_marginLeft="4dp"/>
+
+                                    </TableRow>
+
+                                    <TableRow
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:paddingBottom="8dp">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:drawableLeft="@drawable/ic_day"
+                                            android:text="Fecha:"
+                                            android:textColor="@color/azul_gto"
+                                            android:textStyle="bold"
+                                            android:layout_column="0"/>
+
+                                        <TextView
+                                            android:id="@+id/txvFecha"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="01/01/0000"
+                                            android:textColor="@color/gris_2"
+                                            android:layout_column="1"
+                                            android:layout_marginLeft="4dp"/>
+
+                                    </TableRow>
+
+                                    <TableRow
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:drawableLeft="@drawable/ic_time"
+                                            android:text="Hora:"
+                                            android:textColor="@color/azul_gto"
+                                            android:textStyle="bold"
+                                            android:layout_column="0"/>
+
+                                        <TextView
+                                            android:id="@+id/txvHora"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="00:00"
+                                            android:textColor="@color/gris_2"
+                                            android:layout_column="1"
+                                            android:layout_marginLeft="4dp"/>
+
+                                    </TableRow>
+
+                                </TableLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Incidencia"
+                                    android:textColor="@color/azul_gto"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginBottom="4dp" />
+
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="@color/gris_2"/>
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="120dp"
+                                    android:paddingTop="8dp">
+
+                                    <com.rey.material.widget.FloatingActionButton
+                                        android:id="@+id/btnTakePhoto"
+                                        android:layout_width="12dp"
+                                        android:layout_height="12dp"
+                                        app:fab_iconSrc="@drawable/ic_cam"
+                                        app:rd_enable="true"
+                                        app:rd_rippleType="wave"
+                                        android:layout_alignParentStart="true"/>
+
+                                    <de.hdodenhof.circleimageview.CircleImageView
+                                        android:id="@+id/civPreview"
+                                        android:layout_width="96dp"
+                                        android:layout_height="96dp"
+                                        app:civ_border_width="4dp"
+                                        app:civ_border_color="@color/gris_1"
+                                        android:layout_gravity="center_horizontal"
+                                        android:src="@drawable/ic_preview"
+                                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:layout_centerVertical="true"
+                                        android:layout_centerHorizontal="true"/>
+
+
+                                </RelativeLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/llyCertificado"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Lectura de Certificado"
+                                        android:textColor="@color/azul_gto"
+                                        android:textStyle="bold"
+                                        android:layout_marginBottom="4dp"/>
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:background="@color/gris_2"/>
+
+                                    <TableLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <TableRow
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center_horizontal|center_vertical">
+
+                                            <com.rey.material.widget.FloatingActionButton
+                                                android:id="@+id/btnScan"
+                                                android:layout_width="24dp"
+                                                android:layout_height="24dp"
+                                                app:fab_iconSrc="@drawable/ic_scan"
+                                                app:rd_enable="true"
+                                                app:rd_rippleType="wave"
+                                                android:layout_column="0"
+                                                android:layout_weight="0"
+                                                android:layout_marginTop="16dp"
+                                                android:layout_marginRight="16dp"
+                                                android:layout_marginBottom="16dp"/>
+
+                                            <android.support.design.widget.TextInputLayout
+                                                android:id="@+id/tilBarCode"
+                                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:textColorHint="@color/cyan_gto"
+                                                android:layout_column="1"
+                                                android:layout_weight="3"
+                                                android:layout_margin="16dp"
+                                                android:layout_gravity="center_vertical">
+
+                                                <EditText
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:drawableLeft="@drawable/ic_barcode"
+                                                    android:hint="Código de barras"
+                                                    android:lines="1"
+                                                    android:text="0000000000"
+                                                    android:inputType="number"
+                                                    android:maxLength="20"
+                                                    android:focusable="false"
+                                                    android:clickable="false"/>
+                                            </android.support.design.widget.TextInputLayout>
+
+                                        </TableRow>
+                                    </TableLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@drawable/shape_label_checkin"
+                            android:text="0/1"
+                            android:gravity="center"
+                            android:textColor="@color/cpb_white"
+                            app:layout_anchor="@+id/llyHeader"
+                            app:layout_anchorGravity="end|bottom"
+                            android:layout_marginRight="16dp"
+                            android:focusable="true" />
+
+                    </android.support.design.widget.CoordinatorLayout>
+
+                </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:padding="8dp">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                card_view:cardCornerRadius="10dp">
-
-                <android.support.design.widget.CoordinatorLayout
+                <com.rey.material.widget.Button
+                    android:id="@+id/btnCheckIn"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:elevation="8dp">
-
-                    <LinearLayout
-                        android:id="@+id/llyActividad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/llyHeader"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/shape_card_header"
-                            android:gravity="center"
-                            android:padding="8dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Nombre Actividad"
-                                android:lines="2"
-                                android:maxLines="3"
-                                android:textColor="@color/cpb_white"
-                                android:gravity="center_vertical"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llyBody"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_anchor="@+id/llyHeader"
-                            android:padding="16dp"
-                            android:background="@color/gris_1">
-
-                            <TableLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <TableRow
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="16dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Periodo:"
-                                        android:drawableLeft="@drawable/ic_date"
-                                        android:textColor="@color/gris_2"
-                                        android:textStyle="bold"
-                                        android:layout_column="0"/>
-
-                                    <TextView
-                                        android:id="@+id/txvPeriodo"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Nombre Periodo"
-                                        android:textColor="@color/cyan_gto"
-                                        android:layout_column="1"
-                                        android:layout_marginLeft="4dp"/>
-
-                                </TableRow>
-
-                                <TableRow
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="16dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:drawableLeft="@drawable/ic_day"
-                                        android:text="Fecha:"
-                                        android:textColor="@color/gris_2"
-                                        android:textStyle="bold"
-                                        android:layout_column="0"/>
-
-                                    <TextView
-                                        android:id="@+id/txvFecha"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="01/01/0000"
-                                        android:textColor="@color/cyan_gto"
-                                        android:layout_column="1"
-                                        android:layout_marginLeft="4dp"/>
-
-                                </TableRow>
-
-                                <TableRow
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:drawableLeft="@drawable/ic_time"
-                                        android:text="Hora:"
-                                        android:textColor="@color/gris_2"
-                                        android:textStyle="bold"
-                                        android:layout_column="0"/>
-
-                                    <TextView
-                                        android:id="@+id/txvHora"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="00:00"
-                                        android:textColor="@color/cyan_gto"
-                                        android:layout_column="1"
-                                        android:layout_marginLeft="4dp"/>
-
-                                </TableRow>
-
-                            </TableLayout>
-
-                            <android.support.design.widget.TextInputLayout
-                                android:id="@+id/tilDescripcion"
-                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textColorHint="@color/cyan_gto"
-                                android:layout_marginTop="16dp"
-                                android:gravity="start">
-
-                                <EditText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="Descripción"
-                                    android:maxLines="5"
-                                    android:lines="5"
-                                    android:inputType="textMultiLine"
-                                    android:maxLength="150"/>
-                            </android.support.design.widget.TextInputLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:background="@drawable/shape_button_download"
-                        android:text="0/1"
-                        android:gravity="center"
-                        android:textColor="@color/cpb_white"
-                        app:layout_anchor="@+id/llyHeader"
-                        app:layout_anchorGravity="end|bottom"
-                        android:layout_marginRight="16dp"
-                        android:focusable="true" />
-
-                </android.support.design.widget.CoordinatorLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                card_view:cardCornerRadius="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/gris_1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Captura de evidencia"
-                            android:textColor="@color/cyan_gto"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@color/cyan_gto"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:background="@color/gris_1">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|center_horizontal">
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/civPreview"
-                                android:layout_width="96dp"
-                                android:layout_height="96dp"
-                                android:src="@drawable/ic_cam"
-                                app:civ_border_width="3dp"
-                                app:civ_border_color="@color/cyan_gto"
-                                android:layout_gravity="center_horizontal"
-                                android:elevation="4dp"
-                                xmlns:app="http://schemas.android.com/apk/res-auto"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_weight="3"
-                            android:gravity="center_horizontal"
-                            android:paddingTop="8dp"
-                            android:paddingBottom="8dp">
-
-                            <com.rey.material.widget.FloatingActionButton
-                                android:id="@+id/btnTakePhoto"
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:elevation="4dp"
-                                app:fab_iconSrc="@drawable/ic_cam"
-                                app:rd_enable="true"
-                                app:rd_rippleType="wave"/>
-
-                            <com.rey.material.widget.FloatingActionButton
-                                android:id="@+id/btnPreview"
-                                android:layout_width="54dp"
-                                android:layout_height="54dp"
-                                android:elevation="4dp"
-                                app:fab_iconSrc="@drawable/ic_arrow_forward"
-                                app:rd_enable="true"
-                                app:rd_rippleType="wave"/>
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                card_view:cardCornerRadius="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:background="@color/gris_1">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Leer Certificado"
-                            android:textColor="@color/cyan_gto"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:background="@color/cyan_gto"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="@color/gris_1">
-
-                        <TableLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TableRow
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal|center_vertical">
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/tilBarCode"
-                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textColorHint="@color/cyan_gto"
-                                    android:layout_column="0"
-                                    android:layout_weight="3"
-                                    android:layout_margin="16dp">
-
-                                    <EditText
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:drawableLeft="@drawable/ic_barcode"
-                                        android:hint="Código de barras"
-                                        android:lines="1"
-                                        android:text="0000000000"
-                                        android:inputType="number"
-                                        android:maxLength="20"
-                                        android:focusable="false"
-                                        android:clickable="false"/>
-                                </android.support.design.widget.TextInputLayout>
-
-                                <com.rey.material.widget.FloatingActionButton
-                                    android:id="@+id/btnScan"
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:elevation="4dp"
-                                    app:fab_iconSrc="@drawable/ic_scan"
-                                    app:rd_enable="true"
-                                    app:rd_rippleType="wave"
-                                    android:layout_column="1"
-                                    android:layout_weight="0"
-                                    android:layout_marginTop="16dp"
-                                    android:layout_marginRight="16dp"
-                                    android:layout_marginBottom="16dp"/>
-
-                            </TableRow>
-                        </TableLayout>
-
-
-
-
-
-                    </LinearLayout>
-                </LinearLayout>
-
-            </android.support.v7.widget.CardView>
+                    android:layout_height="50dp"
+                    android:text="Check-In"
+                    app:rd_enable="true"
+                    style="@style/LoginButton"
+                    app:rd_style="@style/LoginBtnStyle"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
