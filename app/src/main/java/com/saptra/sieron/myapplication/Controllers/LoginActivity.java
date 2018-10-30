@@ -17,6 +17,11 @@ import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
     private void ValidarSesion() {
         String usuario = tilUsuario.getEditText().getText().toString();
         String contrasena = tilContrasena.getEditText().getText().toString();
+        contrasena = md5(contrasena);
         mUsuarios loginUsuario = new mUsuarios();
         loginUsuario.setLoginUsuario(usuario);
         loginUsuario.setPasswordUsuario(contrasena);
@@ -191,5 +197,22 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString(getString(R.string.sp_TipoFigura), usuario.getTipoFiguras().getDescripcionTipoFigura());
         editor.putBoolean(getString(R.string.sp_Logged), true);
         editor.commit();
+    }
+
+    private static String md5(String pass) {
+        String password = null;
+        MessageDigest mdEnc;
+        try {
+            mdEnc = MessageDigest.getInstance("MD5");
+            mdEnc.update(pass.getBytes(), 0, pass.length());
+            pass = new BigInteger(1, mdEnc.digest()).toString(16);
+            while (pass.length() < 32) {
+                pass = "0" + pass;
+            }
+            password = pass;
+        } catch (NoSuchAlgorithmException e1) {
+            e1.printStackTrace();
+        }
+        return password;
     }
 }
