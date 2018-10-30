@@ -42,7 +42,7 @@ public class CheckInActivity extends AppCompatActivity {
 
     //Controls
     Toolbar tlbCheckIn;
-    TextInputLayout tilBarCode;
+    TextInputLayout tilBarCode, tilIncidencia;
     FloatingActionButton btnScan;
     CircleImageView civPreview;
     FloatingActionButton btnTakePhoto;
@@ -75,6 +75,7 @@ public class CheckInActivity extends AppCompatActivity {
         btnScan = (FloatingActionButton) findViewById(R.id.btnScan);
         btnTakePhoto = (FloatingActionButton) findViewById(R.id.btnTakePhoto);
         tilBarCode = (TextInputLayout) findViewById(R.id.tilBarCode);
+        tilIncidencia = (TextInputLayout) findViewById(R.id.tilIncidencia);
         tilBarCode.getEditText().setKeyListener(null);
         btnCheckIn = (Button) findViewById(R.id.btnCheckIn);
 
@@ -132,8 +133,9 @@ public class CheckInActivity extends AppCompatActivity {
         btnCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActividadCheckIn();
-                /*new AlertDialog.Builder(getApplication())
+                try {
+                    ActividadCheckIn();
+                new AlertDialog.Builder(getApplication())
                         .setTitle("AVISO")
                         .setMessage("Se cerrará la sesión actual. Continuar?")
                         .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
@@ -148,7 +150,11 @@ public class CheckInActivity extends AppCompatActivity {
                                 dialogInterface.dismiss();
                             }
                         })
-                        .show();*/
+                        .show();
+                }
+                catch (Exception ex){
+                    Log.e("btnCheckIn", ex.getMessage());
+                }
             }
         });
     }
