@@ -21,9 +21,9 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_width="@dimen/anchor_field"
+        android:layout_height="@dimen/l__icon"
+        android:layout_marginTop="20dp"
         app:srcCompat="@drawable/logo_saptra"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/pvProgress"/>
@@ -41,17 +41,17 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="@dimen/padding_size"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/tilUsuario"
-                android:layout_width="256dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dp">
 
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/anchor_field"
                     android:layout_height="wrap_content"
                     android:hint="Usuario"
                     android:drawableLeft="@drawable/ic_person"
@@ -62,12 +62,12 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/tilContrasena"
-                android:layout_width="250dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="64dp">
 
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/anchor_field"
                     android:layout_height="wrap_content"
                     android:hint="Contraseña"
                     android:drawableLeft="@drawable/ic_key"

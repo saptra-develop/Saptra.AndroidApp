@@ -2,6 +2,7 @@ package com.saptra.sieron.myapplication.Data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -59,6 +60,36 @@ public class cPeriodosData {
             Log.e("deletePeriodo", "Error: "+ex.getLocalizedMessage());
             throw  ex;
         }
+    }
+
+    /***************************************************************************
+     * OBTENER PERIODO SEMANAL
+     ***************************************************************************/
+    public cPeriodos getPeridoSemanal() {
+        cPeriodos  periodo = new cPeriodos();
+        String query = "SELECT *" +
+                " FROM "+dbh.TBL_PERIODOS;
+
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        Log.e("getPeridoSemanal", ""+c.getCount());
+        try{
+            if(c.moveToFirst()){
+                cPeriodos obj = new cPeriodos();
+                obj.setPeriodoId(c.getInt(c.getColumnIndex(dbh.PER_PERIODO_ID)));
+                obj.setDecripcionPeriodo(c.getString(c.getColumnIndex(dbh.PER_DESCRIPCION_PERIODO)));
+                periodo = obj;
+            }
+        }
+        catch (Exception ex){
+            Log.d("getPeridoSemanal", "Error :"+ex.getLocalizedMessage());
+        }
+        finally {
+            if(c != null && c.isClosed()){
+                c.close();
+            }
+        }
+        return periodo;
     }
 
 }

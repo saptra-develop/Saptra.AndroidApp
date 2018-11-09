@@ -2,24 +2,26 @@ package com.saptra.sieron.myapplication.Models;
 
 public class dDetallePlanSemanal {
     private int DetallePlanId;
-    private int PlanSemanalId;
+    private mPlanSemanal mPlanSemanal;
     private String FechaCreacion;
     private int UsuarioCreacionId;
     private int EstatusId;
-    private cTipoActividades TipoActividad;
-    private String FechaAcividad;
+    private cTipoActividades cTipoActividades;
+    private String FechaActividad;
     private String HoraActividad;
     private int CantidadCheckIn;
     private String DescripcionActividad;
+    private String LugarActividad;
     private String ComentariosNoValidacion;
     private String ComentariosRechazo;
     private boolean ActividadRechazada;
 
     public dDetallePlanSemanal(){
         DetallePlanId = 0;
+        mPlanSemanal =  new mPlanSemanal();
         UsuarioCreacionId = 0;
         EstatusId = 0;
-        TipoActividad = new cTipoActividades();
+        cTipoActividades = new cTipoActividades();
         CantidadCheckIn = 0;
         ActividadRechazada = false;
     }
@@ -32,12 +34,12 @@ public class dDetallePlanSemanal {
         DetallePlanId = detallePlanId;
     }
 
-    public int getPlanSemanalId() {
-        return PlanSemanalId;
+    public mPlanSemanal getPlanSemanal() {
+        return mPlanSemanal;
     }
 
-    public void setPlanSemanalId(int PlanSemanalId) {
-        this.PlanSemanalId = PlanSemanalId;
+    public void setPlanSemanal(int PlanSemanalId) {
+        this.mPlanSemanal = mPlanSemanal;
     }
 
     public String getFechaCreacion() {
@@ -64,20 +66,20 @@ public class dDetallePlanSemanal {
         EstatusId = estatusId;
     }
 
-    public cTipoActividades getTipoActividad() {
-        return TipoActividad;
+    public cTipoActividades getTipoActividades() {
+        return cTipoActividades;
     }
 
-    public void setTipoActividad(cTipoActividades tipoActividad) {
-        TipoActividad = tipoActividad;
+    public void setTipoActividades(cTipoActividades cTipoActividades) {
+        cTipoActividades = cTipoActividades;
     }
 
-    public String getFechaAcividad() {
-        return FechaAcividad;
+    public String getFechaActividad() {
+        return FechaActividad;
     }
 
-    public void setFechaAcividad(String fechaAcividad) {
-        FechaAcividad = fechaAcividad;
+    public void setFechaActividad(String FechaActividad) {
+        this.FechaActividad = FechaActividad;
     }
 
     public String getHoraActividad() {
@@ -100,8 +102,16 @@ public class dDetallePlanSemanal {
         return DescripcionActividad;
     }
 
-    public void setDescripcionActividad(String descripcionActividad) {
-        DescripcionActividad = descripcionActividad;
+    public void setDescripcionActividad(String DescripcionActividad) {
+        this.DescripcionActividad = DescripcionActividad;
+    }
+
+    public String getLugarActividad() {
+        return LugarActividad;
+    }
+
+    public void setLugarActividad(String lugarActividad) {
+        this.LugarActividad = lugarActividad;
     }
 
     public String getComentariosNoValidacion() {

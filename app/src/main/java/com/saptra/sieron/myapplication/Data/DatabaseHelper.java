@@ -21,6 +21,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TBL_PLAN_SEMANAL = "mPlanSemanal";
     public static final String TBL_ROLES = "mRoles";
     public static final String TBL_PERIODOS = "cPeriodos";
+    public static final String TBL_CHECKIN = "mCheckIn";
+    public static final String TBL_LECTURA_CERTIFICADOS = "mLecturaCertificados";
+
 
     //USUARIOS
     public static final String USR_USUARIO_ID = "UsuarioId";
@@ -60,6 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DPS_HORA_ACTIVIDAD = "HoraActividad";
     public static final String DPS_CANTIDAD_CHECKIN = "CantidadCheckIn";
     public static final String DPS_DESCRIPCION_ACTIVIDAD = "DescripcionActividad";
+    public static final String DPS_LUGAR_ACTIVIDAD = "LugarActividad";
     public static final String DPS_COMENTARIOS_NO_VALIDACION = "ComentariosNoValidacion";
     public static final String DPS_COMENTARIOS_RECHAZO = "ComentariosRechazo";
     public static final String DPS_ACTIVIDAD_RECHAZADA = "ActividadRechazada";
@@ -90,6 +94,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PER_FECHA_INICIO = "FechaInicio";
     public static final String PER_FECHA_FIN = "FechaFin";
     public static final String PER_DESCRIPCION_PERIODO = "DecripcionPeriodo";
+
+    //CheckIn
+    public static final String CHK_ROW_ID = "RowId";
+    public static final String CHK_CHECKIN_ID = "CheckInId";
+    public static final String CHK_FECHA_CREACION = "FechaCreacion";
+    public static final String CHK_USUARIO_CREACION_ID = "UsuarioCreacionId";
+    public static final String CHK_COORDENADAS = "Coordenadas";
+    public static final String CHK_DETALLE_PLAN_ID= "DetallePlanId";
+    public static final String CHK_INCIDENCIAS = "Incidencias";
+    public static final String CHK_IMAGE_DATA = "ImageData";
+    public static final String CHK_FOTO_INCIDENCIA = "FotoIncidencia";
+
+    //LecturaCertificados
+    public static final String LCR_LECTURA_CERTIFICADO_ID = "LecturaCertificadoId";
+    public static final String LCR_FECHA_CREACION = "FechaCreacion";
+    public static final String LCR_USUARIO_CREACION_ID = "UsuarioCreacionId";
+    public static final String LCR_FOLIO_CERTIFICADO = "FolioCertificado";
+    public static final String LCR_ESTATUS_ID = "EstatusId";
+    public static final String LCR_CHECKIN_ID = "CheckInId";
 
     //TABLA PLAN SEMANAL
     private static final String CREATE_TABLE_PERIODOS =
@@ -148,6 +171,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     DPS_HORA_ACTIVIDAD+ " TEXT, "+
                     DPS_CANTIDAD_CHECKIN+ " INTEGER, " +
                     DPS_DESCRIPCION_ACTIVIDAD+ " TEXT, "+
+                    DPS_LUGAR_ACTIVIDAD+ " TEXT, "+
                     DPS_COMENTARIOS_NO_VALIDACION+ " TEXT, "+
                     DPS_COMENTARIOS_RECHAZO+ " TEXT, "+
                     DPS_ACTIVIDAD_RECHAZADA+ " INTEGER )";
@@ -173,6 +197,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     TIA_REQUIERE_CHECKIN+ " INTEGER, "+
                     TIA_ACTIVIDAD_ESPECIAL+ " INTEGER, "+
                     TIA_MENSAJE+ " TEXT )";
+
+    //TABLA CHECK_IN
+    private static final String CREATE_TABLE_CHECKIN =
+            "CREATE TABLE " +TBL_CHECKIN+" ("+
+                    CHK_ROW_ID+ " INTEGER , "+
+                    CHK_CHECKIN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                    CHK_FECHA_CREACION+ " TEXT, "+
+                    CHK_USUARIO_CREACION_ID+ " INTEGER, "+
+                    CHK_COORDENADAS+ " TEXT, "+
+                    CHK_DETALLE_PLAN_ID+ " INTEGER, "+
+                    CHK_INCIDENCIAS+ " TEXT, "+
+                    CHK_IMAGE_DATA+ " TEXT, "+
+                    CHK_FOTO_INCIDENCIA+ " TEXT )";
+
+    //TABLA LECTURA_CERTIFICADOS
+    private static final String CREATE_TABLE_LECTURA_CERFITICADOS =
+            "CREATE TABLE " +TBL_LECTURA_CERTIFICADOS+" ("+
+                    LCR_LECTURA_CERTIFICADO_ID+ " INTEGER PRIMARY KEY, "+
+                    LCR_FECHA_CREACION+ " TEXT, "+
+                    LCR_USUARIO_CREACION_ID+ " INTEGER, "+
+                    LCR_FOLIO_CERTIFICADO+ " TEXT, "+
+                    LCR_ESTATUS_ID+ " INTEGER, "+
+                    LCR_CHECKIN_ID+ " INTEGER )";
 
 
     public static synchronized DatabaseHelper getInstance(Context context) {
@@ -200,6 +247,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_TIPO_FIGURAS);
         db.execSQL(CREATE_TABLE_TIPO_ACTIVIDADES);
         db.execSQL(CREATE_TABLE_PERIODOS);
+        db.execSQL(CREATE_TABLE_CHECKIN);
+        db.execSQL(CREATE_TABLE_LECTURA_CERFITICADOS);
     }
 
     @Override
@@ -212,6 +261,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_TIPO_FIGURAS);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_TIPO_ACTIVIDADES);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_PERIODOS);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_CHECKIN);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_LECTURA_CERFITICADOS);
 
         // create new tables
         onCreate(db);

@@ -37,7 +37,7 @@ public class mPlanSemanalData {
         values.put(dbh.PLS_USUARIO_CREACION_ID, ps.getUsuarioCreacionId());
         values.put(dbh.PLS_ESTATUS_ID, ps.getEstatusId());
         values.put(dbh.PLS_DESCRIPCION_PLANEACION, ps.getDescripcionPlaneacion());
-        values.put(dbh.PLS_PERIODO_ID, ps.getPeriodoId());
+        values.put(dbh.PLS_PERIODO_ID, ps.getPeriodos().getPeriodoId());
         // insert row
         IdPlanSemanal = db.insert(dbh.TBL_PLAN_SEMANAL, null, values);
         db.close();

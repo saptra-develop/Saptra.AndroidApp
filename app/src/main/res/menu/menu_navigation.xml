@@ -5,22 +5,22 @@
         <item
             android:id="@+id/itmHome"
             android:title="@string/str_home"
-            android:icon="@drawable/ic_home"></item>
+            android:icon="@drawable/ic_home"/>
         <item
             android:id="@+id/itmDonwload"
             android:title="@string/str_descargar"
-            android:icon="@drawable/ic_cloud"></item>
+            android:icon="@drawable/ic_cloud"/>
         <item
             android:id="@+id/itmPlaneacion"
             android:title="@string/str_planeacion"
-            android:icon="@drawable/ic_date"></item>
+            android:icon="@drawable/ic_date"/>
         <item
             android:id="@+id/itmConsultar"
             android:title="@string/str_consultar"
-            android:icon="@drawable/ic_search"></item>
+            android:icon="@drawable/ic_search"/>
         <item
             android:id="@+id/itmSalir"
             android:title="@string/str_salir"
-            android:icon="@drawable/ic_exit"></item>
+            android:icon="@drawable/ic_exit"/>
     </group>
 </menu>

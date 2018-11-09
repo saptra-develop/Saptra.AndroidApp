@@ -9,9 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp">
+        android:padding="@dimen/padding_size">
 
         <LinearLayout
             android:id="@+id/lytInfo"
@@ -25,7 +23,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
+                android:padding="@dimen/margin_size"
                 android:background="@drawable/shape_card_header"
                 android:gravity="center">
 

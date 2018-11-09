@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!--icon size-->
-    <dimen name="icon_size">32dp</dimen>
+    <dimen name="icon_size">24dp</dimen>
+    <!--Text Size-->
+    <dimen name="text_size">16sp</dimen>
+    <!--Margin-->
+    <dimen name="margin_size">32dp</dimen>
+    <!--Margin splash-->
+    <dimen name="margin_splash">120dp</dimen>
+    <!--Padding-->
+    <dimen name="padding_size">32dp</dimen>
+    <!--Padding_inter-->
+    <dimen name="padding_inter">16dp</dimen>
+    <!--Icon nav-->
+    <dimen name="nav_icon">120dp</dimen>
+
+    <!--Login-->
+    <dimen name="l__icon">120dp</dimen>
+    <dimen name="anchor_field">356dp</dimen>
+
+    <!--Reader Barcode-->
+    <dimen name="cam_margin_left">128dp</dimen>
+    <dimen name="cam_margin_rigth">128dp</dimen>
 </resources>

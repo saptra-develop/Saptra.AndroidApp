@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
+import com.saptra.sieron.myapplication.Utils.ExceptionHandler;
 import com.saptra.sieron.myapplication.Utils.Globals;
 
 import java.util.ArrayList;
@@ -39,6 +40,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof ExceptionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+        }
 
         /*if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {

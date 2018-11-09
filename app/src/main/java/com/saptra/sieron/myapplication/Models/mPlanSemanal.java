@@ -6,12 +6,13 @@ public class mPlanSemanal {
     private int UsuarioCreacionId;
     private int EstatusId;
     private String DescripcionPlaneacion;
-    private int PeriodoId;
+    private cPeriodos cPeriodos;
 
     public mPlanSemanal(){
         PlanSemanalId = 0;
         UsuarioCreacionId = 0;
         EstatusId = 0;
+        cPeriodos = new cPeriodos();
     }
 
     public int getPlanSemanalId() {
@@ -54,11 +55,11 @@ public class mPlanSemanal {
         DescripcionPlaneacion = descripcionPlaneacion;
     }
 
-    public int getPeriodoId() {
-        return PeriodoId;
+    public cPeriodos getPeriodos() {
+        return cPeriodos;
     }
 
-    public void setPeriodoId(int PeriodoId) {
-        this.PeriodoId = PeriodoId;
+    public void setPeriodos(cPeriodos cPeriodos) {
+        this.cPeriodos = cPeriodos;
     }
 }

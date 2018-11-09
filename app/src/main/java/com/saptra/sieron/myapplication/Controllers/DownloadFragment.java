@@ -3,6 +3,7 @@ package com.saptra.sieron.myapplication.Controllers;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -15,12 +16,15 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.rey.material.widget.ImageButton;
 import com.saptra.sieron.myapplication.Data.cPeriodosData;
+import com.saptra.sieron.myapplication.Data.cTipoActividadesData;
 import com.saptra.sieron.myapplication.Data.dDetallePlanSemanalData;
 import com.saptra.sieron.myapplication.Data.mPlanSemanalData;
 import com.saptra.sieron.myapplication.Models.HttpListResponse;
 import com.saptra.sieron.myapplication.Models.cPeriodos;
+import com.saptra.sieron.myapplication.Models.cTipoActividades;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mPlanSemanal;
+import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
@@ -45,6 +49,7 @@ public class DownloadFragment extends Fragment {
     private Retrofit mRestAdapter;
     private ServiceApi InfoApi;
 
+    private mUsuarios user;
     private ArrayList<mPlanSemanal> _pSemanal;
     private ArrayList<dDetallePlanSemanal> _dSemanal;
 
@@ -59,6 +64,7 @@ public class DownloadFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_download, container, false);
         //Instancias
         //*********************************************
+        user = getLoggedUser();
         mRestAdapter = new Retrofit.Builder()
                 .baseUrl(ServiceApi.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -151,7 +157,7 @@ public class DownloadFragment extends Fragment {
         }
         try{
             Call<HttpListResponse<mPlanSemanal>> psemanal
-                    = InfoApi.GetPlaneacionSemanal(periodo.getPeriodoId(),6);
+                    = InfoApi.GetPlaneacionSemanal(periodo.getPeriodoId(), user.getUsuarioId());
             psemanal.enqueue(new Callback<HttpListResponse<mPlanSemanal>>() {
                 @Override
                 public void onResponse(Call<HttpListResponse<mPlanSemanal>> call, Response<HttpListResponse<mPlanSemanal>> response) {
@@ -199,7 +205,7 @@ public class DownloadFragment extends Fragment {
         }
         try{
             Call<HttpListResponse<dDetallePlanSemanal>> dsemanal
-                    = InfoApi.GetDetallePlaneacionSemanal(periodo.getPeriodoId(),6);
+                    = InfoApi.GetDetallePlaneacionSemanal(periodo.getPeriodoId(),user.getUsuarioId());
             dsemanal.enqueue(new Callback<HttpListResponse<dDetallePlanSemanal>>() {
                 @Override
                 public void onResponse(Call<HttpListResponse<dDetallePlanSemanal>> call, Response<HttpListResponse<dDetallePlanSemanal>> response) {
@@ -208,10 +214,15 @@ public class DownloadFragment extends Fragment {
                         String data = new Gson().toJson(response.body().getDatos());
                         Log.e("DATA", data);
                         if(response.body().getDatos().size() > 0){
+                            cTipoActividadesData.getInstance(getContext()).deleteTipoActividad();
                             dDetallePlanSemanalData.getInstance(getContext()).deleteDetallePlanSemanal();
                             for(dDetallePlanSemanal obj : response.body().getDatos()){
+                                //Insertar detalle actividad
                                 dDetallePlanSemanalData.getInstance(getContext())
                                         .createDetallePlanSemanal(obj);
+                                //Insertar Tipo Actividad del detalle
+                                cTipoActividadesData.getInstance(getContext())
+                                        .createTipoActividad(obj.getTipoActividades());
                             }
                             Toast.makeText(getContext(),
                                     "La descarga finalizó con éxito",
@@ -238,5 +249,19 @@ public class DownloadFragment extends Fragment {
             ex.printStackTrace();
             Log.e("ObtenerDetPlanSem", "Error:"+ex.getMessage());
         }
+    }
+
+    //Validar si ya se ha iniciado sesion, buscar flag en SharedPreferences
+    private mUsuarios getLoggedUser(){
+        mUsuarios user = new mUsuarios();
+        String sharedPreferences = getResources().getString(R.string.SATRA_PREFERENCES);
+        boolean logged;
+        SharedPreferences settings = getActivity()
+                .getSharedPreferences(sharedPreferences, getActivity().MODE_PRIVATE);
+        logged = settings.getBoolean(getResources().getString(R.string.sp_Logged), false);
+        user.setUsuarioId(
+                settings.getInt(getResources().getString(R.string.sp_UsuarioId),0)
+        );
+        return user;
     }
 }

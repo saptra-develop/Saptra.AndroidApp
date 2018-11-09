@@ -110,6 +110,78 @@
 
             </LinearLayout>
 
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_day"
+                        android:layout_marginRight="16dp"
+                        android:layout_column="0"
+                        android:layout_weight="0"/>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilFecha"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/cyan_gto"
+                        android:layout_column="1"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Fecha"
+                            android:maxLines="2"
+                            android:focusable="false"
+                            android:inputType="textMultiLine" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_time"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_column="2"
+                        android:layout_weight="0"/>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilHora"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/cyan_gto"
+                        android:layout_column="3"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Hora"
+                            android:maxLines="2"
+                            android:inputType="textMultiLine"
+                            android:focusable="false" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </TableRow>
+
+            </TableLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -122,26 +194,25 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_day"
-                    android:layout_marginRight="16dp"/>
+                    android:src="@drawable/ic_checkbox"
+                    android:layout_marginRight="16dp"
+                    android:layout_column="1"/>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/tilFecha"
+                    android:id="@+id/tilCheckIn"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/cyan_gto">
+                    android:textColorHint="@color/cyan_gto"
+                    android:layout_column="2">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Fecha"
-                        android:maxLines="2"
-                        android:lines="2"
-                        android:inputType="textMultiLine"
-                        android:focusable="false" />
+                        android:hint="Lugar"
+                        android:focusable="false"
+                        android:textColor="@color/magenta_gto"/>
                 </android.support.design.widget.TextInputLayout>
-
 
             </LinearLayout>
 
@@ -157,26 +228,26 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_time"
-                    android:layout_marginRight="16dp"/>
+                    android:src="@drawable/ic_place"
+                    android:layout_marginRight="16dp"
+                    android:layout_column="1"/>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/tilHora"
+                    android:id="@+id/tilLugar"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/cyan_gto">
+                    android:textColorHint="@color/cyan_gto"
+                    android:layout_column="2">
 
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Hora"
+                        android:hint="Lugar"
                         android:maxLines="2"
-                        android:lines="2"
                         android:inputType="textMultiLine"
                         android:focusable="false" />
                 </android.support.design.widget.TextInputLayout>
-
 
             </LinearLayout>
 
