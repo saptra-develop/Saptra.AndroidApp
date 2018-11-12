@@ -2,7 +2,7 @@ package com.saptra.sieron.myapplication.Models;
 
 public class mCheckIn {
     private int RowId;
-    private int CheckInId;
+    private String CheckInId;
     private String FechaCreacion;
     private int UsuarioCreacionId;
     private String Coordenadas;
@@ -10,10 +10,11 @@ public class mCheckIn {
     private String Incidencias;
     private String FotoIncidencia;
     private String ImageData;
+    private String State;
+    private String UUID;
 
     public mCheckIn(){
         RowId = 0;
-        CheckInId = 0;
         UsuarioCreacionId = 0;
         dDetallePlanSemanal = new dDetallePlanSemanal();
     }
@@ -26,12 +27,12 @@ public class mCheckIn {
         RowId = rowId;
     }
 
-    public int getCheckInId() {
+    public String getCheckInId() {
         return CheckInId;
     }
 
-    public void setCheckInId(int checkInId) {
-        CheckInId = checkInId;
+    public void setCheckInId(String CheckInId) {
+        this.CheckInId = CheckInId;
     }
 
     public String getFechaCreacion() {
@@ -85,4 +86,20 @@ public class mCheckIn {
     public String getImageData() { return ImageData; }
 
     public void setImageData(String ImageData) { this.ImageData = ImageData; }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String State) {
+        this.State = State;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
 }

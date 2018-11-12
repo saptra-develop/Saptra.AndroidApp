@@ -6,12 +6,16 @@ public class mLecturaCertificados {
     private int UsuarioCreacionId;
     private String FolioCertificado;
     private int EstatusId;
-    private mCheckIn CheckInId;
+    private mCheckIn CheckIn;
+    private String State;
+    private String UUID;
 
     public mLecturaCertificados(){
         LecturaCertificadoId = 0;
         UsuarioCreacionId = 0;
-        CheckInId = new mCheckIn();
+        CheckIn = new mCheckIn();
+        UUID = "";
+        State = "";
     }
 
     public int getLecturaCertificadoId() {
@@ -55,10 +59,26 @@ public class mLecturaCertificados {
     }
 
     public mCheckIn getCheckIn() {
-        return CheckInId;
+        return CheckIn;
     }
 
-    public void setCheckIn(mCheckIn checkInId) {
-        CheckInId = checkInId;
+    public void setCheckIn(mCheckIn checkIn) {
+        CheckIn = checkIn;
+    }
+
+    public String getState() {
+        return State;
+    }
+
+    public void setState(String State) {
+        this.State = State;
+    }
+
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
     }
 }

@@ -252,13 +252,39 @@
             </LinearLayout>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="bottom|right"
                 android:paddingRight="16dp"
                 android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:id="@+id/llyCertificado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentLeft="true"
+                    android:paddingLeft="16dp"
+                    android:paddingBottom="2dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_file"
+                        android:paddingRight="16dp"/>
+
+                    <TextView
+                        android:id="@+id/txvCertificados"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/str_certificados"
+                        android:textColor="@color/cyan_gto"
+                        android:clickable="true"/>
+                </LinearLayout>
+
+
 
                 <com.rey.material.widget.FloatingActionButton
                     android:id="@+id/btnCheck"
@@ -267,9 +293,11 @@
                     android:elevation="4dp"
                     app:fab_iconSrc="@drawable/ic_arrow_forward"
                     app:rd_enable="true"
-                    app:rd_rippleType="wave"/>
+                    app:rd_rippleType="wave"
 
-            </LinearLayout>
+                    android:layout_alignParentRight="true" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>

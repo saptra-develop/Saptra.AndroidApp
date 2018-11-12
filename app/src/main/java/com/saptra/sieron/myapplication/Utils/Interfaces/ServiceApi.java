@@ -6,6 +6,7 @@ import com.saptra.sieron.myapplication.Models.cPeriodos;
 import com.saptra.sieron.myapplication.Models.cTipoActividades;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mCheckIn;
+import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.Models.mPlanSemanal;
 import com.saptra.sieron.myapplication.Models.mUsuarios;
 
@@ -61,6 +62,12 @@ public interface ServiceApi {
     //Send CheckIn
     @POST("Saptra/CheckIn/PostCheckIn")
     Call <String> PostCheckIn(@Body mCheckIn checkIn);
+
+    //Post CheckIns
+    @POST("Saptra/CheckIn/PostCheckIns")
+    Call<HttpListResponse<mLecturaCertificados>> PostCheckIns(
+            @Body List<mLecturaCertificados> lstChecks
+    );
 }
 
 

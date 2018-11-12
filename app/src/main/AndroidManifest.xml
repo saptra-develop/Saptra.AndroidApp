@@ -74,7 +74,12 @@
 
         <activity android:name=".Widgets.CertificadoListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyDialogTheme"/>
+            android:theme="@style/MyDialogTheme" />
+
+        <!-- services -->
+        <service
+            android:name=".Widgets.SynchronizerService"
+            android:enabled="true" />
     </application>
 
 </manifest>

@@ -26,4 +26,6 @@
     <string name="Error">Error</string>
     <string name="Complete">Complete</string>
 
+    <string name="str_certificados"><u>Ver Certificados</u></string>
+
 </resources>

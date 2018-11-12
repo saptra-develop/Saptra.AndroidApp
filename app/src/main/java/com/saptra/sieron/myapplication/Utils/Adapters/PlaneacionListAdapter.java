@@ -2,6 +2,7 @@ package com.saptra.sieron.myapplication.Utils.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +10,10 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.instantapps.ActivityCompat;
 import com.saptra.sieron.myapplication.Data.mCheckInData;
+import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mCheckIn;
+import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Interfaces.PlaneacionViewListener;
 import com.saptra.sieron.myapplication.Utils.ViewHolders.PlaneacionListViewHolder;
@@ -47,6 +50,7 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         int DetallePlanId = lstDetPlanSem.get(position).getDetallePlanId();
         long checks = mCheckInData.getInstance(c).getCheckInRealizados(DetallePlanId);
         int TotalChecks = lstDetPlanSem.get(position).getCantidadCheckIn();
+        long certificados = mLecturaCertificadosData.getInstance(c).getCertificadosCount(DetallePlanId);
         holder.txvPeriodo.setText(lstDetPlanSem.get(position).getPlanSemanal().getPeriodos().getDecripcionPeriodo());
         holder.tilActividad.getEditText().setText(lstDetPlanSem.get(position).getTipoActividades().getNombreActividad());
         holder.tilDescripcion.getEditText().setText(lstDetPlanSem.get(position).getDescripcionActividad());
@@ -55,13 +59,19 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         holder.tilLugar.getEditText().setText(lstDetPlanSem.get(position).getLugarActividad());
         holder.tilCheckIn.getEditText().setText(checks+" / "+TotalChecks);
 
+        holder.txvCertificados.setMovementMethod(LinkMovementMethod.getInstance());
+
         //Validar si ya tiene check-in
-        //if(!lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()){
         if(checks == TotalChecks){
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.magenta_gto));
             holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_check_white), false);
         }
-        //}
+        //Si actividad es especial y contiene certificados leidos, mostrar layout
+        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
+                lstDetPlanSem.get(position).getCantidadCheckIn() > 1){
+            if(certificados > 0)
+                holder.llyCertificados.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

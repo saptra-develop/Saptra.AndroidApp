@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import com.google.gson.Gson;
 import com.rey.material.widget.ProgressView;
+import com.saptra.sieron.myapplication.Controllers.CheckInActivity;
 import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
+import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Adapters.CertificadoListAdapter;
@@ -27,15 +29,19 @@ public class CertificadoListActivity extends AppCompatActivity {
     private RelativeLayout rlCancelar;
 
     //Other
-    ArrayList<mLecturaCertificados> lstCertificados;
-    CertificadoListAdapter adapterCertificado;
+    private static final int INTENT_CHECKIN = 112;
+    private ArrayList<mLecturaCertificados> lstCertificados;
+    private CertificadoListAdapter adapterCertificado;
+    private dDetallePlanSemanal model;
+    private String _model = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certificado_list);
 
-        int DetallePlanId = getIntent().getIntExtra("DetallePlanId", 0);
+        _model = getIntent().getStringExtra("model");
+        model = new Gson().fromJson(_model, dDetallePlanSemanal.class);
 
         rvwSelectList = (RecyclerView) findViewById(R.id.rvwSelectList);
         btnCancelar = (Button) findViewById(R.id.btnCancelar);
@@ -44,8 +50,11 @@ public class CertificadoListActivity extends AppCompatActivity {
 
         ControlBehavior(false);
 
-        lstCertificados = new ArrayList<mLecturaCertificados>();
-        lstCertificados = mLecturaCertificadosData.getInstance(this).getCertificadosPorActividad(DetallePlanId);
+        if(model != null) {
+            lstCertificados = new ArrayList<mLecturaCertificados>();
+            lstCertificados = mLecturaCertificadosData.getInstance(this)
+                    .getCertificadosLeidos(model.getDetallePlanId());
+        }
 
         if(lstCertificados.size() > 0){
             ControlBehavior(true);
@@ -54,11 +63,12 @@ public class CertificadoListActivity extends AppCompatActivity {
             adapterCertificado.setRecyclerViewItemClickListener(new RecyclerViewClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Intent returnIntent = new Intent();
-                    String certificado = new Gson().toJson(lstCertificados.get(position), mLecturaCertificados.class);
-                    returnIntent.putExtra("Certificado", certificado);
-                    setResult(RESULT_OK, returnIntent);
-                    ((CertificadoListActivity) view.getContext()).finish();
+                    Intent intent = new Intent(getApplication(), CheckInActivity.class);
+                    intent.putExtra("model", _model);
+                    intent.putExtra("certificado", lstCertificados.get(position)
+                            .getFolioCertificado());
+                    startActivityForResult(intent, INTENT_CHECKIN);
+                    finish();
                 }
             });
             rvwSelectList.setAdapter(adapterCertificado);

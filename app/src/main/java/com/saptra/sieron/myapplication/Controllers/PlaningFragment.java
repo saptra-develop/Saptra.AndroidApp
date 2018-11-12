@@ -16,8 +16,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.saptra.sieron.myapplication.Data.cPeriodosData;
 import com.saptra.sieron.myapplication.Data.dDetallePlanSemanalData;
+import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
 import com.saptra.sieron.myapplication.Models.cPeriodos;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
+import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Adapters.PlaneacionListAdapter;
 import com.saptra.sieron.myapplication.Utils.Interfaces.PlaneacionViewListener;
@@ -57,6 +59,7 @@ public class PlaningFragment extends Fragment {
         //*********************************************
         periodo = (cPeriodos) cPeriodosData.getInstance(getContext()).getPeridoSemanal();
         if(periodo != null) {
+
             lstDetPlanSem = (ArrayList<dDetallePlanSemanal>)
                     dDetallePlanSemanalData.getInstance(getContext())
                             .getDetPlanSemanal(periodo.getPeriodoId());
@@ -67,47 +70,24 @@ public class PlaningFragment extends Fragment {
             planeacionListAdapter.setPlaneacionViewListener(new PlaneacionViewListener() {
                 @Override
                 public void ButtonClick(View view, final int position) {
-                    if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
-                            lstDetPlanSem.get(position).getCantidadCheckIn() > 1){
-                        //Si actividad especial, preguntar...
-                        new AlertDialog.Builder(getActivity())
-                                .setTitle("Actividad Especial")
-                                .setPositiveButton("CHECK-IN", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(getActivity(), CheckInActivity.class);
-                                        String model = new Gson().toJson(lstDetPlanSem.get(position));
-                                        Log.e("ButtonClick", model);
-                                        intent.putExtra("model", model);
-                                        startActivityForResult(intent, INTENT_CHECKIN);
-                                        dialogInterface.dismiss();
-
-                                    }
-                                })
-                                .setNeutralButton("VER CERTIFICADOS", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(getActivity(), CertificadoListActivity.class);
-                                        currentActividad = lstDetPlanSem.get(position);
-                                        intent.putExtra("DetallePlanId", lstDetPlanSem.get(position).getDetallePlanId());
-                                        startActivityForResult(intent, INTENT_CERTIFICADOS);
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
-                    }
-                    else{
-                        Intent intent = new Intent(getActivity(), CheckInActivity.class);
-                        String model = new Gson().toJson(lstDetPlanSem.get(position));
-                        Log.e("ButtonClick", model);
-                        intent.putExtra("model", model);
-                        startActivityForResult(intent, INTENT_CHECKIN);
-                    }
-
+                    Intent intent = new Intent(getActivity(), CheckInActivity.class);
+                    String model = new Gson().toJson(lstDetPlanSem.get(position));
+                    intent.putExtra("model", model);
+                    startActivityForResult(intent, INTENT_CHECKIN);
                 }
 
                 @Override
-                public void DetalleClick(View view, int position) {
-
+                public void CertificadoClick(View view, int position) {
+                    int DetallePlanId = lstDetPlanSem.get(position).getDetallePlanId();
+                    long certificados = mLecturaCertificadosData.getInstance(getActivity())
+                            .getCertificadosCount(DetallePlanId);
+                    if(certificados > 0) {
+                        Intent intent = new Intent(getActivity(), CertificadoListActivity.class);
+                        String model = new Gson()
+                                .toJson(lstDetPlanSem.get(position), dDetallePlanSemanal.class);
+                        intent.putExtra("model", model);
+                        startActivityForResult(intent, INTENT_CHECKIN);
+                    }
                 }
             });
             rvwDetPlanSem.setAdapter(planeacionListAdapter);

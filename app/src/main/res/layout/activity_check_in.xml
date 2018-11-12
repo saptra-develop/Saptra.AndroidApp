@@ -34,6 +34,16 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/pvProgress"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            app:pv_autostart="true"
+            app:pv_circular="false"
+            app:pv_progressMode="indeterminate"
+            app:pv_progressStyle="@style/BarProgressView"
+            android:layout_alignParentTop="true"/>
+
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/nsNestedPrincipal"
             android:layout_width="match_parent"
@@ -44,16 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
-                <com.rey.material.widget.ProgressView
-                    android:id="@+id/pvProgress"
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    app:pv_autostart="true"
-                    app:pv_circular="false"
-                    app:pv_progressMode="indeterminate"
-                    app:pv_progressStyle="@style/BarProgressView"
-                    android:layout_alignParentTop="true"/>
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -238,9 +238,10 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:hint="Incidencia"
+                                        android:imeOptions="actionDone"
+                                        android:inputType="textCapWords|textCapSentences"
                                         android:maxLines="3"
                                         android:lines="2"
-                                        android:inputType="textMultiLine"
                                         android:maxLength="150"/>
                                 </android.support.design.widget.TextInputLayout>
 
@@ -300,14 +301,13 @@
                                                 <EditText
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:clickable="false"
                                                     android:drawableLeft="@drawable/ic_barcode"
-                                                    android:hint="Código de barras"
-                                                    android:lines="1"
-                                                    android:text="0000000000"
-                                                    android:inputType="number"
-                                                    android:maxLength="20"
                                                     android:focusable="false"
-                                                    android:clickable="false"/>
+                                                    android:hint="Código de barras"
+                                                    android:inputType="text"
+                                                    android:lines="1"
+                                                    android:text="" />
                                             </android.support.design.widget.TextInputLayout>
 
                                         </TableRow>

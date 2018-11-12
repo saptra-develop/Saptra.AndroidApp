@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import java.text.SimpleDateFormat;
 
-import android.graphics.BitmapFactory;
+import java.security.spec.ECField;
+import java.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -53,6 +53,10 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -86,8 +90,9 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     private static final int REQUEST_LOCATION = 203;
     private mUsuarios user;
     private dDetallePlanSemanal model;
-    private boolean LeerCertificado = false;
+    private String certificado = "";
     private mCheckIn checkIn;
+    File photoFile;
 
     //Geolocalization
     String lattitude ="", longitude="";
@@ -101,6 +106,8 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
+        this.setFinishOnTouchOutside(false);
+
         /********************************************
          *      PARAMETROS DE SERVICIO WEB
          *******************************************/
@@ -132,6 +139,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         tilBarCode.getEditText().setKeyListener(null);
         btnCheckIn = (Button) findViewById(R.id.btnCheckIn);
         llyCertificado = findViewById(R.id.llyCertificado);
+        llyCertificado.setVisibility(View.GONE);
 
         pvProgress.setVisibility(View.GONE);
 
@@ -156,36 +164,42 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             user = getLoggedUser();
             String _model = getIntent().getStringExtra("model");
             model = new Gson().fromJson(_model, dDetallePlanSemanal.class);
+            if(getIntent().getStringExtra("certificado") != null) {
+                certificado = getIntent().getStringExtra("certificado").equals("")
+                        ? "" : getIntent().getStringExtra("certificado");
+            }
             int DetallePlanId = model.getDetallePlanId();
             long checks = mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId);
             int TotalChecks = model.getCantidadCheckIn();
 
-            if (model != null) {
+            txvChecks.setText(checks + "/" + TotalChecks);
 
+            if (model != null) {
                 txvActividad.setText(model.getTipoActividades().getNombreActividad());
                 txvPeriodo.setText(model.getPlanSemanal().getPeriodos().getDecripcionPeriodo());
                 txvFecha.setText(model.getFechaActividad().substring(0, 10));
                 txvHora.setText(model.getHoraActividad().substring(0, 5));
 
                 //Ocultar / Mostrar Lector de Certificados
-                //if (RequiereCertificado(model)) {
+                if (RequiereCertificado(model)) {
                     llyCertificado.setVisibility(View.VISIBLE);
-                //} else {
-                    //llyCertificado.setVisibility(View.GONE);
-                //}
+                } else {
+                    llyCertificado.setVisibility(View.GONE);
+                }
 
-                txvChecks.setText(checks + "/" + TotalChecks);
-                if (checks == TotalChecks) {
-                    checkIn = mCheckInData.getInstance(getApplication()).getCheckInsDetallePlan(DetallePlanId);
-                    if (checkIn.getCheckInId() > 0) {
+                //Cantidad CheckIns completo, ocultar controles
+                if (checks == TotalChecks || !certificado.equals("")) {
+                    checkIn = mCheckInData.getInstance(getApplication())
+                            .getCheckInsDetallePlan(DetallePlanId, certificado);
+                    if (checkIn.getCheckInId() != ""    ) {
                         //Ocultar botones
                         btnCheckIn.setVisibility(View.GONE);
                         btnTakePhoto.setVisibility(View.GONE);
                         btnScan.setVisibility(View.GONE);
                         //mostrar indicencia registrada
-                        tilIncidencia.setFocusable(false);
-                        tilIncidencia.setEnabled(false);
+                        tilIncidencia.getEditText().setFocusable(false);
                         tilIncidencia.getEditText().setText(checkIn.getIncidencias());
+                        tilBarCode.getEditText().setText(certificado);
                         Bitmap img = Globals.getInstance().Base64ToBitmap(checkIn.getImageData());
                         if (img != null) {
                             civPreview.setImageBitmap(img);
@@ -195,7 +209,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             }
         }
         catch(Exception ex){
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ERROR:"+ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
         /********************************************
@@ -214,8 +228,16 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             public void onClick(View view) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if(cameraIntent.resolveActivity(getPackageManager()) != null){
-                    File photoFile = null;
                     try{
+                        if(photoFile != null){
+                            try {
+                                photoFile.delete();
+                            }
+                            catch (Exception e){
+                                Log.e("FOTO", "ERROR:"+e.getLocalizedMessage());
+                            }
+                        }
+                        photoFile = null;
                         photoFile = createImageFile();
                     }
                     catch (IOException ex){
@@ -241,9 +263,11 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         civPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mCurrentPhotoPath != "") {
+                if(!mCurrentPhotoPath.equals("") || !checkIn.getImageData().equals("")) {
                     Intent intent = new Intent(CheckInActivity.this, PhotoPreview.class);
                     intent.putExtra("CurrentPhotoPath", mCurrentPhotoPath);
+                    intent.putExtra("DetallePlanId", model.getDetallePlanId());
+                    intent.putExtra("certificado", certificado);
                     startActivity(intent);
                 }
                 else
@@ -257,23 +281,35 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             @Override
             public void onClick(View v) {
                 try {
-                new AlertDialog.Builder(CheckInActivity.this)
-                        .setTitle("AVISO")
-                        .setMessage("Se realizará check-in a la actividad actual, continuar?")
-                        .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                GenerateCheckIn();
-                            }
-                        })
-                        .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        })
-                        .setCancelable(false)
-                        .show();
+                    if(!Validaciones()) {
+                        return;
+                    }
+                    new AlertDialog.Builder(CheckInActivity.this)
+                            .setTitle("AVISO")
+                            .setMessage("Se realizará check-in a la actividad actual, continuar?")
+                            .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    pvProgress.setVisibility(View.VISIBLE);
+                                    TimerTask task = new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                        }
+                                    };
+                                    new Timer().schedule(task, 1000);
+                                    GenerateCheckIn();
+
+                                }
+                            })
+                            .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            })
+                            .setCancelable(false)
+                            .show();
                 }
                 catch (Exception ex){
                     Log.e("btnCheckIn", ex.getMessage());
@@ -353,7 +389,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                setResult(RESULT_OK);
+                this.setResult(RESULT_OK);
                 finish();
                 break;
         }
@@ -362,9 +398,9 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        setResult(RESULT_OK);
+        this.setResult(RESULT_OK);
         finish();
+        super.onBackPressed();
     }
 
     @Override
@@ -380,7 +416,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                     try {
                         mImageBitmap = MediaStore.Images.Media
                                 .getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
-                        //mImageBitmap = reduceBitmapSize(mCurrentPhotoPath);
+                        mImageBitmap = Globals.getInstance().getResizedBitmap(this, Uri.parse(mCurrentPhotoPath).getPath());
                         //civPreview.setImageBitmap(mImageBitmap);
                         Picasso.with(this).load(Uri.parse(mCurrentPhotoPath))
                                 .placeholder(getResources().getDrawable(R.drawable.ic_preview))
@@ -399,51 +435,49 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     /*******************************************************************************
             METHODS
      /******************************************************************************/
-
     private void GenerateCheckIn(){
-        pvProgress.setVisibility(View.VISIBLE);
         byte[] bFile;
         String base64File = "";
-        mLecturaCertificados certificado = new mLecturaCertificados();
-        long newCheckInID = 0, newCertificado = 0;
-
-        if(!Validaciones()) {
-            pvProgress.setVisibility(View.GONE);
-            return;
-        }
+        mLecturaCertificados certificado = null;
+        String checkID = "", certificadoID = "";
+        long rowCheckID = 0, rowCertificadoID = 0;
 
         try {
             if(mImageBitmap != null) {
-                //bFile = Globals.getInstance().bitmapToByte(mImageBitmap);
-                //base64File = Globals.getInstance().ByteArrayToB64Sring(bFile);
+                bFile = Globals.getInstance().bitmapToByte(mImageBitmap);
+                base64File = Globals.getInstance().ByteArrayToB64Sring(bFile);
             }
-
+            checkID = UUID.randomUUID().toString();
+            checkIn.setCheckInId(checkID);
             checkIn.getDetallePlan().setDetallePlanId(model.getDetallePlanId());
             checkIn.setImageData(base64File);
             checkIn.setUsuarioCreacionId(user.getUsuarioId());
             checkIn.setCoordenadas(lattitude+","+longitude);
             checkIn.setIncidencias(tilIncidencia.getEditText().getText().toString());
             if(RequiereCertificado(model)){
+                certificado = new mLecturaCertificados();
                 certificado.setFolioCertificado(tilBarCode.getEditText().getText().toString());
                 certificado.setUsuarioCreacionId(user.getUsuarioId());
             }
-            newCheckInID = mCheckInData.getInstance(this).createCheckIn(checkIn);
-            if(newCheckInID > 0){
-                int NewID = (int) newCheckInID;
-                certificado.getCheckIn().setCheckInId(NewID);
-                newCertificado = mLecturaCertificadosData.getInstance(this).createLecturaCerificado(certificado);
-                pvProgress.setVisibility(View.GONE);
-                showToastMessage("CheckIn correcto!!");
-                DisabledControls();
+            String _UUID = user.getUsuarioId()+UUID.randomUUID().toString();
+            checkIn.setUUID(_UUID);
+            checkIn.setState("I");
+            rowCheckID = mCheckInData.getInstance(this).createCheckIn(checkIn);
+            if(rowCheckID > 0 && certificado != null){
+                certificado.getCheckIn().setCheckInId(checkID);
+                certificado.setUUID(_UUID);
+                certificado.setState("I");
+                rowCertificadoID = mLecturaCertificadosData.getInstance(this).createLecturaCerificado(certificado);
             }
+            pvProgress.setVisibility(View.GONE);
+            showToastMessage("CheckIn correcto!!");
+            DisabledControls();
         }catch (Exception ex){
             pvProgress.setVisibility(View.GONE);
             showToastMessage("GenerateCheckIn-ERROR:"+ex.getMessage());
-            if(newCheckInID > 0){
-                int CheckInId = (int) newCheckInID;
-                int CertificadoId = (int) newCertificado;
-                mCheckInData.getInstance(this).deleteCheckInRow(CheckInId);
-                mLecturaCertificadosData.getInstance(this).deleteLectCerRow(CertificadoId);
+            if(rowCheckID > 0){
+                mCheckInData.getInstance(this).deleteCheckInRow(checkID);
+                mLecturaCertificadosData.getInstance(this).deleteLectCerRow(rowCertificadoID);
             }
         }
     }
@@ -459,17 +493,19 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         }
         else
             validacion = true;
+
         //VALIDAR UBICACION
-        /*getCurrentLocation();
+        getCurrentLocation();
         if(lattitude.equals("") || longitude.equals("")) {
             showToastMessage("No se puede obtener su ubicación, verifique su gps");
             validacion = false;
         }
         else
-            validacion = true;*/
+            validacion = true;
+
         //VALIDAR LECTURA DE CERTIFICADO
         if(RequiereCertificado(model)){
-            if(tilBarCode.getEditText().getText().equals("")){
+            if(tilBarCode.getEditText().getText().toString().equals("")){
                 tilBarCode.setErrorEnabled(true);
                 showToastMessage("No se han leído ningún código");
                 tilBarCode.setError("No se han leído ningún código");
@@ -631,53 +667,25 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         return user;
     }
 
-    private Bitmap reduceBitmapSize(String  filepath)
-    {
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filepath, bmOptions);
-        bmOptions.inSampleSize = calculateInSampleSize(bmOptions);
-        bmOptions.inJustDecodeBounds = false;
-        Bitmap bitmap =BitmapFactory.decodeFile(filepath,bmOptions);
-        return bitmap;
-    }
-    // This method is used to calculate largest inSampleSize
-//which is used to decode bitmap in required bitmap.
-    private int calculateInSampleSize(BitmapFactory.Options bmOptions)
-    {
-        // Raw height and width of image
-        final int photoWidth = bmOptions.outWidth;
-        final int photoHeight = bmOptions.outHeight;
-        int scaleFactor = 1;
-        if (photoWidth > 640
-                || photoHeight > 960)
-        {
-            final int halfPhotoWidth = photoWidth / 2;
-            final int halfPhotoHeight = photoHeight / 2;
-
-            // Calculate the largest inSampleSize value that is a power of 2
-            //and keeps both height and width larger than the requested height and width.
-            while ((halfPhotoWidth / scaleFactor) >= 640
-                    && (halfPhotoHeight / scaleFactor) >= 960)
-            {
-                scaleFactor *= 2;
-            }
-        }
-        return scaleFactor;
-    }
-
     private void DisabledControls(){
         btnScan.setVisibility(View.GONE);
         btnTakePhoto.setVisibility(View.GONE);
         btnCheckIn.setVisibility(View.GONE);
-        tilIncidencia.setFocusable(false);
-        tilIncidencia.setEnabled(false);
-        tilBarCode.setFocusable(false);
-        tilBarCode.setEnabled(false);
+        tilIncidencia.getEditText().setFocusable(false);
         //Actualizar indicador CheckIn´s
         int DetallePlanId = model.getDetallePlanId();
         long checks = mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId);
         int TotalChecks = model.getCantidadCheckIn();
         txvChecks.setText(checks + "/" + TotalChecks);
+
+        //Borrar última foto tomada
+        if(photoFile != null){
+            try {
+                photoFile.delete();
+            }
+            catch (Exception e){
+                Log.e("FOTO", "ERROR:"+e.getLocalizedMessage());
+            }
+        }
     }
 }

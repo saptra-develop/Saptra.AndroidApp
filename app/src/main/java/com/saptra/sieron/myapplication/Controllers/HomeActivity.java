@@ -1,6 +1,9 @@
 package com.saptra.sieron.myapplication.Controllers;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,8 +30,10 @@ import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.ExceptionHandler;
 import com.saptra.sieron.myapplication.Utils.Globals;
+import com.saptra.sieron.myapplication.Widgets.SynchronizerService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -43,6 +48,23 @@ public class HomeActivity extends AppCompatActivity {
 
         if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof ExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+        }
+
+        try {
+
+            startService(new Intent(this, SynchronizerService.class));
+            Calendar cal = Calendar.getInstance();
+            Intent intent = new Intent(this, SynchronizerService.class);
+            PendingIntent pintent = PendingIntent
+                    .getService(this, 0, intent, 0);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            // Start service every hour
+            alarm.setInexactRepeating(AlarmManager.RTC, cal.getTimeInMillis(),
+                    (1000 * 60 * 1), pintent);
+        }
+        catch (Exception e){
+            Toast.makeText(getApplication(),
+                    "Home-Serc Error:"+ e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         /*if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)

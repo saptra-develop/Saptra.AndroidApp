@@ -240,7 +240,7 @@ public class DownloadFragment extends Fragment {
                 public void onFailure(Call<HttpListResponse<dDetallePlanSemanal>> call, Throwable t) {
                     Log.e("@_ObtenerDetPlanSem", "error: "+t.getMessage());
                     Toast.makeText(getContext(),
-                            "Error al intentar descargar",
+                            "Error al intentar descargar, vuelve a intentar.",
                             Toast.LENGTH_LONG).show();
                 }
             });

@@ -3,9 +3,11 @@ package com.saptra.sieron.myapplication.Data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.saptra.sieron.myapplication.Models.mCheckIn;
 import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.Utils.Globals;
 
@@ -37,12 +39,14 @@ public class mLecturaCertificadosData {
         long IdLecturaCertificado= 0;
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(dbh.LCR_LECTURA_CERTIFICADO_ID, lc.getLecturaCertificadoId());
+        //values.put(dbh.LCR_LECTURA_CERTIFICADO_ID, lc.getLecturaCertificadoId());
         values.put(dbh.LCR_FECHA_CREACION, lc.getFechaCreacion());
         values.put(dbh.LCR_USUARIO_CREACION_ID, lc.getUsuarioCreacionId());
         values.put(dbh.LCR_FOLIO_CERTIFICADO, lc.getFolioCertificado());
         values.put(dbh.LCR_ESTATUS_ID, lc.getEstatusId());
         values.put(dbh.LCR_CHECKIN_ID, lc.getCheckIn().getCheckInId());
+        values.put(dbh.LCR_STATE, lc.getState());
+        values.put(dbh.LCR_UUID, lc.getUUID());
         // insert row
         IdLecturaCertificado = db.insert(dbh.TBL_LECTURA_CERTIFICADOS, null, values);
         db.close();
@@ -51,17 +55,36 @@ public class mLecturaCertificadosData {
     }
 
     /***************************************************************************
-     * GET CERTIFICADOS POR ACTIVIDAD
+     * GET CERTIFICADOS POR ACTIVIDAD COUNT
      ***************************************************************************/
-    public ArrayList<mLecturaCertificados> getCertificadosPorActividad (int DetallePlanId){
+    public long getCertificadosCount(int DetallePlanId) {
+        long count = 0;
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor mCount= db.rawQuery(
+                "SELECT COUNT(1)"+
+                    " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
+                    " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
+                    " JOIN "+ dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
+                    " WHERE C."+dbh.DPS_DETALLE_PLAN_ID+" = "+DetallePlanId
+                , null);
+        mCount.moveToFirst();
+        count= mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
+    /***************************************************************************
+     * GET CERTIFICADOS POR ACTIVIDAD LIST
+     ***************************************************************************/
+    public ArrayList<mLecturaCertificados> getCertificadosLeidos (int DetallePlanId){
         ArrayList<mLecturaCertificados> lstCertificado = new ArrayList<mLecturaCertificados>();
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor c = db.rawQuery(
-                " SELECT A.*"+dbh.CHK_CHECKIN_ID+ //, "+dbh.CHK_IMAGE_DATA+", "+dbh.CHK_INCIDENCIAS+", "+dbh.CHK_FECHA_CREACION+
+                " SELECT A.*, B."+dbh.CHK_CHECKIN_ID+ //, "+dbh.CHK_IMAGE_DATA+", "+dbh.CHK_INCIDENCIAS+", "+dbh.CHK_FECHA_CREACION+
                         " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
                         " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
-                        " JOIN "+dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C"+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
-                        " WHERE A."+dbh.DPS_DETALLE_PLAN_ID+" = "+DetallePlanId
+                        " JOIN "+dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
+                        " WHERE C."+dbh.DPS_DETALLE_PLAN_ID+" = "+DetallePlanId
                 , null);
         Log.e("getCheckInsDetallePlan", ""+c.getCount());
         try{
@@ -70,7 +93,7 @@ public class mLecturaCertificadosData {
                     mLecturaCertificados obj = new mLecturaCertificados();
                     obj.setLecturaCertificadoId(c.getInt(c.getColumnIndex(dbh.LCR_LECTURA_CERTIFICADO_ID)));
                     obj.setFolioCertificado(c.getString(c.getColumnIndex(dbh.LCR_FOLIO_CERTIFICADO)));
-                    obj.getCheckIn().setCheckInId(c.getInt(c.getColumnIndex(dbh.CHK_CHECKIN_ID)));
+                    obj.getCheckIn().setCheckInId(c.getString(c.getColumnIndex(dbh.CHK_CHECKIN_ID)));
                     lstCertificado.add(obj);
                 }
                 while(c.moveToNext());
@@ -105,18 +128,41 @@ public class mLecturaCertificadosData {
     /***************************************************************************
      * DELETE ROW
      ***************************************************************************/
-    public int deleteLectCerRow(int Certificado){
+    public int deleteLectCerRow(long rowID){
         int remove = 0;
         try{
             SQLiteDatabase db = dbh.getReadableDatabase();
-            String _WHERE= dbh.LCR_LECTURA_CERTIFICADO_ID +" = "+Certificado;
+            String _WHERE= dbh.LCR_ROW_ID +" = "+rowID;
             //Ejecutar update
             remove = db.delete(dbh.TBL_LECTURA_CERTIFICADOS,  _WHERE, null);
         }
         catch(Exception ex){
             remove = 0;
-            Log.e("updateCliente", "Error: "+ex.getMessage());
+            Log.e("deleteLectCerRow", "Error: "+ex.getMessage());
         }
         return  remove;
+    }
+
+    /***************************************************************************
+     * UPDATE CERTIFICADO
+     ***************************************************************************/
+    public int updateCertificado(mLecturaCertificados certificado){
+        int actualizado = 0;
+        try{
+            SQLiteDatabase db = dbh.getReadableDatabase();
+            //Contenedor de valores a modificar
+            ContentValues cv = new ContentValues();
+            cv.put(dbh.LCR_LECTURA_CERTIFICADO_ID, certificado.getLecturaCertificadoId());
+            cv.put(dbh.LCR_STATE, certificado.getState());
+            //Generar where
+            String _WHERE= dbh.LCR_UUID +" = '"+ certificado.getUUID()+"'";
+            //Ejecutar update
+            actualizado = db.update(dbh.TBL_LECTURA_CERTIFICADOS, cv, _WHERE, null);
+        }
+        catch(Exception ex){
+            actualizado = 0;
+            Log.e("updateCertificado", "Error: "+ex.getMessage());
+        }
+        return  actualizado;
     }
 }
