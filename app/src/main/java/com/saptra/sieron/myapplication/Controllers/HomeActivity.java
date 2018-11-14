@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -46,6 +48,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //android O fix bug orientation
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof ExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
         }
@@ -60,19 +67,13 @@ public class HomeActivity extends AppCompatActivity {
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             // Start service every hour
             alarm.setInexactRepeating(AlarmManager.RTC, cal.getTimeInMillis(),
-                    (1000 * 60 * 1), pintent);
+                    (1000 * 60 * 3), pintent);
         }
         catch (Exception e){
             Toast.makeText(getApplication(),
                     "Home-Serc Error:"+ e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
-        /*if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    0);
-        }*/
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             boolean allPermissionsGranted = true;
             ArrayList<String> toRequestPermissions = new ArrayList<>();
@@ -85,9 +86,10 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
             if(allPermissionsGranted) {
-                Toast.makeText(this,
+                /*Toast.makeText(this,
                         "Todos los permisos asignados",
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
+                Log.e("allPermissionsGranted", "Todos los permisos asignados");
             }
             else {
                 ActivityCompat.requestPermissions(this,
@@ -186,12 +188,12 @@ public class HomeActivity extends AppCompatActivity {
                             tlbHome.setSubtitle(R.string.str_planeacion);
                             drlHome.closeDrawer(GravityCompat.START);
                             return  true;
-                        case R.id.itmConsultar:
+                        /*case R.id.itmConsultar:
                             menuItem.setChecked(true);
                             setFragment(3);
                             tlbHome.setSubtitle(R.string.str_consultar);
                             drlHome.closeDrawer(GravityCompat.START);
-                            return  true;
+                            return  true;*/
                         case R.id.itmSalir:
                             CloseSession();
                             break;

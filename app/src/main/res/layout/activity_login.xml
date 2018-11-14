@@ -5,13 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grd_background_grey"
     tools:context=".Controllers.LoginActivity">
     
     <com.rey.material.widget.ProgressView
         android:id="@+id/pvProgress"
         android:layout_width="match_parent"
-        android:layout_height="4dp"
+        android:layout_height="6dp"
         app:pv_autostart="true"
         app:pv_circular="false"
         app:pv_progressMode="indeterminate"

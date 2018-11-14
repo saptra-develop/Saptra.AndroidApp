@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-
-import java.security.spec.ECField;
 import java.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,6 +17,8 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -56,7 +57,6 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -70,15 +70,16 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Controls
-    Toolbar tlbCheckIn;
-    TextView txvActividad, txvPeriodo, txvFecha, txvHora, txvChecks;
-    TextInputLayout tilBarCode, tilIncidencia;
-    FloatingActionButton btnScan;
-    CircleImageView civPreview;
-    FloatingActionButton btnTakePhoto;
-    Button btnCheckIn;
-    View llyCertificado;
+    private Toolbar tlbCheckIn;
+    private TextView txvActividad, txvPeriodo, txvFecha, txvHora, txvChecks;
+    private TextInputLayout tilBarCode, tilIncidencia;
+    private FloatingActionButton btnScan;
+    private CircleImageView civPreview;
+    private FloatingActionButton btnTakePhoto;
+    private Button btnCheckIn;
+    private View llyCertificado;
     private ProgressView pvProgress;
+    private CoordinatorLayout clMensajes;
 
     //Others
     private Retrofit mRestAdapter;
@@ -92,10 +93,10 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     private dDetallePlanSemanal model;
     private String certificado = "";
     private mCheckIn checkIn;
-    File photoFile;
+    private File photoFile;
 
     //Geolocalization
-    String lattitude ="", longitude="";
+    private String lattitude ="", longitude="";
     private Location mLocation = null;
     private GoogleApiClient mGoogleApiClient = null;
     private LocationManager mLocationManager = null;
@@ -107,6 +108,11 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
         this.setFinishOnTouchOutside(false);
+
+        //android O fix bug orientation
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         /********************************************
          *      PARAMETROS DE SERVICIO WEB
@@ -136,6 +142,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         btnTakePhoto = (FloatingActionButton) findViewById(R.id.btnTakePhoto);
         tilBarCode = (TextInputLayout) findViewById(R.id.tilBarCode);
         tilIncidencia = (TextInputLayout) findViewById(R.id.tilIncidencia);
+        clMensajes = (CoordinatorLayout) findViewById(R.id.clMensajes);
         tilBarCode.getEditText().setKeyListener(null);
         btnCheckIn = (Button) findViewById(R.id.btnCheckIn);
         llyCertificado = findViewById(R.id.llyCertificado);
@@ -291,15 +298,13 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialogInterface.dismiss();
-                                    pvProgress.setVisibility(View.VISIBLE);
                                     TimerTask task = new TimerTask() {
                                         @Override
                                         public void run() {
+                                            GenerateCheckIn();
                                         }
                                     };
                                     new Timer().schedule(task, 1000);
-                                    GenerateCheckIn();
-
                                 }
                             })
                             .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {
@@ -443,6 +448,16 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         long rowCheckID = 0, rowCertificadoID = 0;
 
         try {
+
+            //Deshabilitar controles y mostrar progress
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pvProgress.setVisibility(View.VISIBLE);
+                    HabilitarControles(false);
+                }
+            });
+
             if(mImageBitmap != null) {
                 bFile = Globals.getInstance().bitmapToByte(mImageBitmap);
                 base64File = Globals.getInstance().ByteArrayToB64Sring(bFile);
@@ -469,12 +484,37 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 certificado.setState("I");
                 rowCertificadoID = mLecturaCertificadosData.getInstance(this).createLecturaCerificado(certificado);
             }
-            pvProgress.setVisibility(View.GONE);
-            showToastMessage("CheckIn correcto!!");
-            DisabledControls();
-        }catch (Exception ex){
-            pvProgress.setVisibility(View.GONE);
-            showToastMessage("GenerateCheckIn-ERROR:"+ex.getMessage());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pvProgress.setVisibility(View.GONE);
+                    Snackbar.make(clMensajes, "Check-in correcto!"
+                            , Snackbar.LENGTH_INDEFINITE)
+                            .setAction("ACEPTAR", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            }).show();
+                    DisabledControls();
+                }
+            });
+
+        }catch (final Exception ex){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    pvProgress.setVisibility(View.GONE);
+                    Snackbar.make(clMensajes,
+                            "Error al genera Check-In. Error: "+ex.getLocalizedMessage()
+                            , Snackbar.LENGTH_INDEFINITE)
+                            .setAction("ACEPTAR", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                }
+                            }).show();
+                    HabilitarControles(true);
+                }
+            });
             if(rowCheckID > 0){
                 mCheckInData.getInstance(this).deleteCheckInRow(checkID);
                 mLecturaCertificadosData.getInstance(this).deleteLectCerRow(rowCertificadoID);
@@ -566,7 +606,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         if (mLocation != null) {
             lattitude = String.valueOf(mLocation.getLatitude());
             longitude = String.valueOf(mLocation.getLongitude());
-            Toast.makeText(getApplication(), "Lat:"+lattitude+"  long:"+longitude, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplication(), "Lat:"+lattitude+"  long:"+longitude, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Sin poder detectar geolocalización", Toast.LENGTH_SHORT).show();
             lattitude = ""; longitude = "";
@@ -687,5 +727,15 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 Log.e("FOTO", "ERROR:"+e.getLocalizedMessage());
             }
         }
+    }
+
+    public void HabilitarControles(boolean accion){
+        tilIncidencia.setEnabled(accion);
+        tilIncidencia.setClickable(accion);
+        civPreview.setClickable(accion);
+        btnScan.setEnabled(accion);
+        btnScan.setClickable(accion);
+        btnCheckIn.setEnabled(accion);
+        btnCheckIn.setClickable(accion);
     }
 }

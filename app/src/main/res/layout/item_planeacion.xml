@@ -209,7 +209,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Lugar"
+                        android:hint="Check-In"
                         android:focusable="false"
                         android:textColor="@color/magenta_gto"/>
                 </android.support.design.widget.TextInputLayout>

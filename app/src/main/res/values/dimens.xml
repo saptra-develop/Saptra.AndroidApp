@@ -23,4 +23,7 @@
     <!--Reader Barcode-->
     <dimen name="cam_margin_left">64dp</dimen>
     <dimen name="cam_margin_rigth">64dp</dimen>
+
+    <!--Inicio-->
+    <dimen name="inicio_img">456dp</dimen>
 </resources>

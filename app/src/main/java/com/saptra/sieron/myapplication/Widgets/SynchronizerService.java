@@ -36,7 +36,7 @@ public class SynchronizerService extends Service  {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Servicio creado", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Servicio creado", Toast.LENGTH_LONG).show();
         Log.e("onCreate", "Servicio creado");
         mRestAdapter = new Retrofit.Builder()
                 .baseUrl(ServiceApi.BASE_URL)
@@ -53,14 +53,12 @@ public class SynchronizerService extends Service  {
             return START_STICKY;
         }
         SincronizarCheckIns();
-        //SincronizaPrestamos();
-        //SincronizaGastos();
         return Service.START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "Servicio destruido", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Servicio destruido", Toast.LENGTH_LONG).show();
         Log.e("onCreate", "Servicio destruido");
         super.onDestroy();
     }

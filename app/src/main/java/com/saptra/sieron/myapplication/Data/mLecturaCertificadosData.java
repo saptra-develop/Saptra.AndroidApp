@@ -116,7 +116,8 @@ public class mLecturaCertificadosData {
     public void deleteLecuraCertificado() {
         try {
             SQLiteDatabase db = dbh.getReadableDatabase();
-            int d_rows = db.delete(dbh.TBL_LECTURA_CERTIFICADOS, "", null);
+            String _WHERE = dbh.LCR_STATE+" = 'S'";
+            int d_rows = db.delete(dbh.TBL_LECTURA_CERTIFICADOS, _WHERE, null);
             Log.e("deleteLecCer", "deleted_rows: " + d_rows);
         }
         catch (Exception ex){

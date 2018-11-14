@@ -1,6 +1,8 @@
 package com.saptra.sieron.myapplication.Widgets;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +41,11 @@ public class CertificadoListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certificado_list);
+
+        //android O fix bug orientation
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         _model = getIntent().getStringExtra("model");
         model = new Gson().fromJson(_model, dDetallePlanSemanal.class);

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Controllers.InicioFragment"
-    android:background="@drawable/grd_background_grey">
+    android:background="@color/cpb_white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -74,10 +74,11 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:src="@drawable/ic_profile"
-            android:layout_centerInParent="true"/>
+            android:layout_width="@dimen/inicio_img"
+            android:layout_height="@dimen/inicio_img"
+            android:src="@drawable/logo_saptra_wm"
+            android:layout_centerInParent="true"
+            android:layout_margin="16dp"/>
 
     </RelativeLayout>
 

@@ -10,6 +10,22 @@
     tools:context=".Widgets.SelectListActivity"
     android:gravity="center">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="Periodo"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:padding="8dp"/>
+    </LinearLayout>
+
     <com.rey.material.widget.ProgressView
         android:id="@+id/pvProgress"
         android:layout_width="48dp"

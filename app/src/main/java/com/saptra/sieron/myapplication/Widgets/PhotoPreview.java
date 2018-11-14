@@ -1,7 +1,9 @@
 package com.saptra.sieron.myapplication.Widgets;
 
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,6 +32,11 @@ public class PhotoPreview extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_preview);
 
+        //android O fix bug orientation
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         imvPreview = (ImageView) findViewById(R.id.imvPreview);
         tlbPreview = (android.support.v7.widget.Toolbar) findViewById(R.id.tlbPreview);
         tlbPreview.setTitle("Viste Previa");
@@ -42,7 +49,7 @@ public class PhotoPreview extends AppCompatActivity {
         certificado = getIntent().getStringExtra("certificado");
 
         mCheckIn checkIn = mCheckInData.getInstance(this).getCheckInsDetallePlan(DetallePlanId, certificado);
-        if(checkIn != null) {
+        if(checkIn.getCheckInId() != null && checkIn.getImageData().length() > 0) {
             bImage = Globals.getInstance().Base64ToBitmap(checkIn.getImageData());
         }
 

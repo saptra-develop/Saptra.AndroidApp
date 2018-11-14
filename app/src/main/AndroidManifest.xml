@@ -37,26 +37,21 @@
         <!-- Not main Activities -->
         <activity
             android:name=".Controllers.HomeActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
             android:name=".Controllers.LoginActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
             android:name=".Controllers.ReadBarCodeActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Widgets.SelectListActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/MyDialogTheme" />
         <activity
             android:name=".Controllers.CheckInActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
         <activity
             android:name=".Widgets.PhotoPreview"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Base" />
 
         <provider
@@ -69,11 +64,9 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".Controllers.ErrorActivity"
-            android:screenOrientation="portrait"/>
+        <activity android:name=".Controllers.ErrorActivity"/>
 
         <activity android:name=".Widgets.CertificadoListActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/MyDialogTheme" />
 
         <!-- services -->
@@ -81,5 +74,4 @@
             android:name=".Widgets.SynchronizerService"
             android:enabled="true" />
     </application>
-
 </manifest>

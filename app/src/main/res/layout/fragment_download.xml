@@ -45,6 +45,18 @@
             app:rd_style="@style/DownloadBtnStyle"
             android:elevation="4dp"/>
 
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/pvProgress"
+            android:layout_width="256dp"
+            android:layout_height="6dp"
+            app:pv_autostart="true"
+            app:pv_circular="false"
+            app:pv_progressMode="indeterminate"
+            app:pv_progressStyle="@style/BarProgressView"
+            android:layout_below="@+id/btnDownload"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"/>
+
     </RelativeLayout>
 
 

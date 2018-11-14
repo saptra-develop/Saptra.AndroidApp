@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,17 +14,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.rey.material.widget.ImageButton;
+import com.rey.material.widget.ProgressView;
 import com.saptra.sieron.myapplication.Data.cPeriodosData;
 import com.saptra.sieron.myapplication.Data.cTipoActividadesData;
 import com.saptra.sieron.myapplication.Data.dDetallePlanSemanalData;
+import com.saptra.sieron.myapplication.Data.mCheckInData;
+import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
 import com.saptra.sieron.myapplication.Data.mPlanSemanalData;
 import com.saptra.sieron.myapplication.Models.HttpListResponse;
 import com.saptra.sieron.myapplication.Models.cPeriodos;
 import com.saptra.sieron.myapplication.Models.cTipoActividades;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
+import com.saptra.sieron.myapplication.Models.mCheckIn;
+import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
 import com.saptra.sieron.myapplication.Models.mPlanSemanal;
 import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
@@ -31,6 +37,7 @@ import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
 import com.saptra.sieron.myapplication.Widgets.SelectListActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,13 +49,17 @@ import static android.app.Activity.RESULT_OK;
 
 public class DownloadFragment extends Fragment {
 
-    TextInputLayout tilPeriodo;
-    ImageButton btnDownload;
+    //Controls
+    private TextInputLayout tilPeriodo;
+    private ImageButton btnDownload;
     private static final int KEY_SELECT_LIST = 111;
     private cPeriodos periodo;
     private Retrofit mRestAdapter;
     private ServiceApi InfoApi;
+    private ProgressView pvProgress;
+    private CoordinatorLayout clMensajes;
 
+    //Others
     private mUsuarios user;
     private ArrayList<mPlanSemanal> _pSemanal;
     private ArrayList<dDetallePlanSemanal> _dSemanal;
@@ -75,6 +86,11 @@ public class DownloadFragment extends Fragment {
         _dSemanal = new ArrayList<dDetallePlanSemanal>();
         tilPeriodo = (TextInputLayout) view.findViewById(R.id.tilPeriodo);
         btnDownload = (ImageButton) view.findViewById(R.id.btnDownload);
+        pvProgress = (ProgressView) view.findViewById(R.id.pvProgress);
+        clMensajes = (CoordinatorLayout) view.findViewById(R.id.clMensajes);
+
+        //Iniciar
+        pvProgress.setVisibility(View.GONE);
 
         //*********************************************
 
@@ -108,6 +124,8 @@ public class DownloadFragment extends Fragment {
                         .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                pvProgress.setVisibility(View.VISIBLE);
+                                HabilitarControles(false);
                                 ObtenerPlanSemanal();
                             }
                         })
@@ -171,18 +189,29 @@ public class DownloadFragment extends Fragment {
                                 mPlanSemanalData.getInstance(getContext())
                                         .createPlanSemanal(obj);
                             }
+                            pvProgress.setProgress(33);
                             ObtenerDetallePlanSemanal();
                         }
                         else{
-                            Log.e("IF_ObtenerPlanSemanal", "Sin información");
+                            HabilitarControles(true);
+                            pvProgress.setVisibility(View.GONE);
                             Toast.makeText(getContext(),
                                     "Información no disponible",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
+                    else{
+                        HabilitarControles(true);
+                        pvProgress.setVisibility(View.GONE);
+                        Toast.makeText(getContext(),
+                                "Información plan_semanal no disponible",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
                 @Override
                 public void onFailure(Call<HttpListResponse<mPlanSemanal>> call, Throwable t) {
+                    HabilitarControles(true);
+                    pvProgress.setVisibility(View.GONE);
                     Log.e("@_ObtenerPlanSemanal", "error: "+t.getMessage());
                     Toast.makeText(getContext(),
                             "Error al intentar descargar",
@@ -224,20 +253,28 @@ public class DownloadFragment extends Fragment {
                                 cTipoActividadesData.getInstance(getContext())
                                         .createTipoActividad(obj.getTipoActividades());
                             }
-                            Toast.makeText(getContext(),
-                                    "La descarga finalizó con éxito",
-                                    Toast.LENGTH_LONG).show();
+                            ObtenerCheckIns();
                         }
                         else{
-                            Log.e("IF_ObtenerDetPlanSem", "Sin información");
+                            HabilitarControles(true);
+                            pvProgress.setVisibility(View.GONE);
                             Toast.makeText(getContext(),
                                     "Información no disponible",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
+                    else{
+                        HabilitarControles(true);
+                        pvProgress.setVisibility(View.GONE);
+                        Toast.makeText(getContext(),
+                                "Información detalle_plan no disponible",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
                 @Override
                 public void onFailure(Call<HttpListResponse<dDetallePlanSemanal>> call, Throwable t) {
+                    HabilitarControles(true);
+                    pvProgress.setVisibility(View.GONE);
                     Log.e("@_ObtenerDetPlanSem", "error: "+t.getMessage());
                     Toast.makeText(getContext(),
                             "Error al intentar descargar, vuelve a intentar.",
@@ -248,6 +285,76 @@ public class DownloadFragment extends Fragment {
         catch (Exception ex){
             ex.printStackTrace();
             Log.e("ObtenerDetPlanSem", "Error:"+ex.getMessage());
+        }
+    }
+
+    public void ObtenerCheckIns(){
+        try{
+            Call<HttpListResponse<mLecturaCertificados>> _checks =
+                    InfoApi.GetCheckInsRealizados(periodo.getPeriodoId(), user.getUsuarioId());
+            _checks.enqueue(new Callback<HttpListResponse<mLecturaCertificados>>() {
+                @Override
+                public void onResponse(Call<HttpListResponse<mLecturaCertificados>> call,
+                                       Response<HttpListResponse<mLecturaCertificados>> response) {
+                    if(response.isSuccessful()){
+                        if(response.body().getDatos().size() > 0){
+                            //Borrar datos sincronizados
+                            mCheckInData.getInstance(getActivity())
+                                    .deleteCheckIn();
+                            mLecturaCertificadosData.getInstance(getActivity())
+                                    .deleteLecuraCertificado();
+                            for(mLecturaCertificados certificado : response.body().getDatos()){
+                                mCheckIn check = certificado.getCheckIn();
+                                if(check != null){
+                                    mCheckInData.getInstance(getActivity())
+                                            .createCheckIn(check);
+                                }
+                                if(certificado.getLecturaCertificadoId() > 0) {
+                                    mLecturaCertificadosData.getInstance(getActivity())
+                                            .createLecturaCerificado(certificado);
+                                }
+                            }
+                            HabilitarControles(true);
+                            pvProgress.setVisibility(View.GONE);
+                            Snackbar.make(clMensajes, "La descarga finalizó con éxito."
+                                    , Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("ACEPTAR", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                        }
+                                    }).show();
+                        }
+                        else{
+                            HabilitarControles(true);
+                            pvProgress.setVisibility(View.GONE);
+                            Snackbar.make(clMensajes, "La descarga finalizó con éxito."
+                                    , Snackbar.LENGTH_INDEFINITE)
+                                    .setAction("ACEPTAR", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                        }
+                                    }).show();
+                        }
+                    }
+                    else {
+                        HabilitarControles(true);
+                        pvProgress.setVisibility(View.GONE);
+                        Toast.makeText(getContext(),
+                                "Información checkins no disponible",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<HttpListResponse<mLecturaCertificados>> call, Throwable t) {
+                    HabilitarControles(true);
+                    pvProgress.setVisibility(View.GONE);
+                    Log.e("ObtenerCheckIns", "Error: " + t.getMessage());
+                }
+            });
+        }
+        catch (Exception ex){
+            Log.e("ObtenerCheckIns", "Error: "+ex.getLocalizedMessage());
         }
     }
 
@@ -263,5 +370,12 @@ public class DownloadFragment extends Fragment {
                 settings.getInt(getResources().getString(R.string.sp_UsuarioId),0)
         );
         return user;
+    }
+
+    public void HabilitarControles(boolean accion){
+        tilPeriodo.setEnabled(accion);
+        tilPeriodo.setClickable(accion);
+        btnDownload.setEnabled(accion);
+        btnDownload.setClickable(accion);
     }
 }

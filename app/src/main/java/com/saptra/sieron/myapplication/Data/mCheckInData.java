@@ -60,7 +60,8 @@ public class mCheckInData {
     public void deleteCheckIn() {
         try {
             SQLiteDatabase db = dbh.getReadableDatabase();
-            int d_rows = db.delete(dbh.TBL_CHECKIN, "", null);
+            String _WHERE = dbh.CHK_STATE+ " = 'S'";
+            int d_rows = db.delete(dbh.TBL_CHECKIN, _WHERE, null);
             Log.e("deleteCheckIn", "deleted_rows: " + d_rows);
         }
         catch (Exception ex){

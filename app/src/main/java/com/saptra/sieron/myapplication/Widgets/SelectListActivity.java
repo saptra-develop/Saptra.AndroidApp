@@ -1,6 +1,8 @@
 package com.saptra.sieron.myapplication.Widgets;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,6 +47,12 @@ public class SelectListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_list);
+
+        //android O fix bug orientation
+        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         //Service
         /**********************************************/
         mRestAdapter = new Retrofit.Builder()
@@ -112,7 +120,19 @@ public class SelectListActivity extends AppCompatActivity {
                         else{
                             Log.e("PER-onResponse", "Sin información");
                             ControlBehavior(true);
+                            Toast.makeText(getApplicationContext(),
+                                    "No se obtuvo información",
+                                    Toast.LENGTH_LONG).show();
+                            finish();
                         }
+                    }
+                    else{
+                        Log.e("PER-onResponse", "Sin información");
+                        ControlBehavior(true);
+                        Toast.makeText(getApplicationContext(),
+                                "No se obtuvo información",
+                                Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 }
                 @Override
