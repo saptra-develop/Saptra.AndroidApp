@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.Settings;
 import android.util.Log;
 import com.saptra.sieron.myapplication.Models.mCheckIn;
 import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
@@ -43,7 +44,13 @@ public class mCheckInData {
         values.put(dbh.CHK_COORDENADAS, ci.getCoordenadas());
         values.put(dbh.CHK_DETALLE_PLAN_ID, ci.getDetallePlan().getDetallePlanId());
         values.put(dbh.CHK_INCIDENCIAS, ci.getIncidencias());
-        values.put(dbh.CHK_FOTO_INCIDENCIA, ci.getFotoIncidencia());
+        if(ci.getState().equals("S")){
+            String path = Globals.getInstance().GetPathFromBase64(context, ci.getImageData(), ci.getFotoRutaLocal());
+            values.put(dbh.CHK_FOTO_INCIDENCIA, path);
+        }
+        else {
+            values.put(dbh.CHK_FOTO_INCIDENCIA, ci.getFotoIncidencia());
+        }
         values.put(dbh.CHK_IMAGE_DATA, ci.getImageData());
         values.put(dbh.CHK_STATE, ci.getState());
         values.put(dbh.CHK_UUID, ci.getUUID());
@@ -102,8 +109,9 @@ public class mCheckInData {
                 mCheckIn obj = new mCheckIn();
                 obj.setCheckInId(c.getString(c.getColumnIndex(dbh.CHK_CHECKIN_ID)));
                 obj.setRowId(c.getInt(c.getColumnIndex(dbh.CHK_ROW_ID)));
-                obj.setImageData(c.getString(c.getColumnIndex(dbh.CHK_IMAGE_DATA)));
+                //obj.setImageData(c.getString(c.getColumnIndex(dbh.CHK_IMAGE_DATA)));
                 obj.setIncidencias(c.getString(c.getColumnIndex(dbh.CHK_INCIDENCIAS)));
+                obj.setFotoIncidencia(c.getString(c.getColumnIndex(dbh.CHK_FOTO_INCIDENCIA)));
                 obj.setFechaCreacion(c.getString(c.getColumnIndex(dbh.CHK_FECHA_CREACION)));
                 CheckIn = obj;
             }
@@ -130,6 +138,7 @@ public class mCheckInData {
                         " A."+dbh.CHK_CHECKIN_ID+", A."+dbh.CHK_DETALLE_PLAN_ID+", A."+dbh.CHK_FECHA_CREACION+" CHK_F_C"
                         +", A."+dbh.CHK_USUARIO_CREACION_ID+" CHK_USER, A."+dbh.CHK_IMAGE_DATA+", A."+dbh.CHK_INCIDENCIAS
                         +", A."+dbh.CHK_COORDENADAS+", A."+dbh.CHK_UUID+" CHK_UUID, A."+dbh.CHK_STATE+" CHK_STATE,"+
+                        " A."+dbh.CHK_FOTO_INCIDENCIA+", "+
                         " B."+dbh.LCR_LECTURA_CERTIFICADO_ID+", B."+dbh.LCR_CHECKIN_ID+" LCR_CHECKIN_ID, B."+dbh.LCR_FOLIO_CERTIFICADO
                         +", B."+dbh.LCR_FECHA_CREACION+" LCR_F_C, B."+dbh.LCR_USUARIO_CREACION_ID+" LCR_USER"
                         +", IFNULL(B."+dbh.LCR_UUID+",'') LCR_UUID, B."+dbh.LCR_STATE+" LCR_STATE"+
@@ -147,7 +156,15 @@ public class mCheckInData {
                     obj.getCheckIn().getDetallePlan().setDetallePlanId(c.getInt(c.getColumnIndex(dbh.CHK_DETALLE_PLAN_ID)));
                     obj.getCheckIn().setFechaCreacion(c.getString(c.getColumnIndex("CHK_F_C")));
                     obj.getCheckIn().setUsuarioCreacionId(c.getInt(c.getColumnIndex("CHK_USER")));
-                    obj.getCheckIn().setImageData(c.getString(c.getColumnIndex(dbh.CHK_IMAGE_DATA)));
+                    String path = c.getString(c.getColumnIndex(dbh.CHK_FOTO_INCIDENCIA));
+                    /********************************************************************************/
+                    obj.getCheckIn().setFotoIncidencia(path);
+                    obj.getCheckIn().setFotoRutaLocal(path);
+
+                    String imgBase64 = Globals.getInstance()
+                            .FileToBase64(context, path);
+                    obj.getCheckIn().setImageData(imgBase64);
+                    /********************************************************************************/
                     obj.getCheckIn().setIncidencias(c.getString(c.getColumnIndex(dbh.CHK_INCIDENCIAS)));
                     obj.getCheckIn().setCoordenadas(c.getString(c.getColumnIndex(dbh.CHK_COORDENADAS)));
                     obj.getCheckIn().setUUID(c.getString(c.getColumnIndex("CHK_UUID")));
@@ -198,6 +215,7 @@ public class mCheckInData {
             ContentValues cv = new ContentValues();
             cv.put(dbh.CHK_CHECKIN_ID, check.getCheckInId());
             cv.put(dbh.CHK_STATE, check.getState());
+            cv.put(dbh.CHK_FOTO_INCIDENCIA, check.getFotoRutaLocal());
             //Generar where
             String _WHERE= dbh.CHK_UUID +" = '"+ check.getUUID()+"'";
             //Ejecutar update

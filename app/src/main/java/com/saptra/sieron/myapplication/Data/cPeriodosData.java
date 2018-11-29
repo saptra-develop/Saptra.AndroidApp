@@ -92,4 +92,32 @@ public class cPeriodosData {
         return periodo;
     }
 
+    public cPeriodos getCurrentPeriodo(){
+        cPeriodos periodo = new cPeriodos();
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor c = db.rawQuery(
+                " SELECT *"+
+                        " FROM "+dbh.TBL_PERIODOS
+                , null);
+        Log.e("getPeriodo", ""+c.getCount());
+        try{
+            if(c.moveToFirst()){
+                cPeriodos obj = new cPeriodos();
+                obj.setPeriodoId(c.getInt(c.getColumnIndex(dbh.PER_PERIODO_ID)));
+                obj.setFechaInicio(c.getString(c.getColumnIndex(dbh.PER_FECHA_INICIO)));
+                obj.setFechaFin(c.getString(c.getColumnIndex(dbh.PER_FECHA_FIN)));
+                periodo = obj;
+            }
+        }
+        catch (Exception ex){
+            Log.d("getPeriodo", "Error mientras se intentaba obtener informacion desde la bd");
+        }
+        finally {
+            if(c != null && c.isClosed()){
+                c.close();
+            }
+        }
+        return periodo;
+    }
+
 }

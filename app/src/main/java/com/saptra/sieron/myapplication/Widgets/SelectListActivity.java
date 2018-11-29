@@ -110,6 +110,8 @@ public class SelectListActivity extends AppCompatActivity {
                                         String Periodo = lstPeriodo.get(position).getDecripcionPeriodo();
                                         returnIntent.putExtra("PeriodoId", PeriodoId);
                                         returnIntent.putExtra("Periodo", Periodo);
+                                        returnIntent.putExtra("FechaInicio", lstPeriodo.get(position).getFechaInicio());
+                                        returnIntent.putExtra("FechaFin", lstPeriodo.get(position).getFechaFin());
                                         setResult(RESULT_OK, returnIntent);
                                         ((SelectListActivity) view.getContext()).finish();
                                     }

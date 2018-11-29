@@ -40,7 +40,7 @@ public class mLecturaCertificadosData {
         SQLiteDatabase db = dbh.getWritableDatabase();
         ContentValues values = new ContentValues();
         //values.put(dbh.LCR_LECTURA_CERTIFICADO_ID, lc.getLecturaCertificadoId());
-        values.put(dbh.LCR_FECHA_CREACION, lc.getFechaCreacion());
+        values.put(dbh.LCR_FECHA_CREACION, Globals.getInstance().getDateTime());
         values.put(dbh.LCR_USUARIO_CREACION_ID, lc.getUsuarioCreacionId());
         values.put(dbh.LCR_FOLIO_CERTIFICADO, lc.getFolioCertificado());
         values.put(dbh.LCR_ESTATUS_ID, lc.getEstatusId());
@@ -155,6 +155,7 @@ public class mLecturaCertificadosData {
             ContentValues cv = new ContentValues();
             cv.put(dbh.LCR_LECTURA_CERTIFICADO_ID, certificado.getLecturaCertificadoId());
             cv.put(dbh.LCR_STATE, certificado.getState());
+            cv.put(dbh.LCR_CHECKIN_ID, certificado.getCheckIn().getCheckInId());
             //Generar where
             String _WHERE= dbh.LCR_UUID +" = '"+ certificado.getUUID()+"'";
             //Ejecutar update

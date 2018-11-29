@@ -25,7 +25,6 @@ import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
 import com.saptra.sieron.myapplication.Data.mPlanSemanalData;
 import com.saptra.sieron.myapplication.Models.HttpListResponse;
 import com.saptra.sieron.myapplication.Models.cPeriodos;
-import com.saptra.sieron.myapplication.Models.cTipoActividades;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mCheckIn;
 import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
@@ -35,16 +34,12 @@ import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
 import com.saptra.sieron.myapplication.Widgets.SelectListActivity;
-
 import java.util.ArrayList;
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
 import static android.app.Activity.RESULT_OK;
 
 public class DownloadFragment extends Fragment {
@@ -149,11 +144,20 @@ public class DownloadFragment extends Fragment {
                 case KEY_SELECT_LIST:
                     periodo.setPeriodoId(data.getIntExtra("PeriodoId", 0));
                     periodo.setDecripcionPeriodo(data.getStringExtra("Periodo"));
+                    periodo.setFechaInicio(data.getStringExtra("FechaInicio"));
+                    periodo.setFechaFin(data.getStringExtra("FechaFin"));
                     tilPeriodo.getEditText().setText(periodo.getDecripcionPeriodo());
                     if(periodo.getPeriodoId() > 0){
                         try {
-                            cPeriodosData.getInstance(getContext()).deletePeriodo();
-                            cPeriodosData.getInstance(getContext()).createPeriodo(periodo);
+                            cPeriodos localPeriodo = getLocalPeriodo();
+                            if(periodo.getPeriodoId() != localPeriodo.getPeriodoId()){
+                                cPeriodosData.getInstance(getContext()).deletePeriodo();
+                                cPeriodosData.getInstance(getContext()).createPeriodo(periodo);
+                                SaveLocalPeriodo(periodo);
+                                //Borrar fotos del periodo anterior
+                                Globals.getInstance().DropAllFile(getActivity());
+                            }
+
                         }
                         catch (Exception ex){
                             Log.e("onActResult", "Error al insertar periodo:"+ex.getMessage());
@@ -297,12 +301,15 @@ public class DownloadFragment extends Fragment {
                 public void onResponse(Call<HttpListResponse<mLecturaCertificados>> call,
                                        Response<HttpListResponse<mLecturaCertificados>> response) {
                     if(response.isSuccessful()){
+
+                        //Limpiar tabla para obtener los datos más actualizados
+                        mCheckInData.getInstance(getActivity())
+                                .deleteCheckIn();
+                        mLecturaCertificadosData.getInstance(getActivity())
+                                .deleteLecuraCertificado();
+
                         if(response.body().getDatos().size() > 0){
-                            //Borrar datos sincronizados
-                            mCheckInData.getInstance(getActivity())
-                                    .deleteCheckIn();
-                            mLecturaCertificadosData.getInstance(getActivity())
-                                    .deleteLecuraCertificado();
+
                             for(mLecturaCertificados certificado : response.body().getDatos()){
                                 mCheckIn check = certificado.getCheckIn();
                                 if(check != null){
@@ -365,7 +372,7 @@ public class DownloadFragment extends Fragment {
         boolean logged;
         SharedPreferences settings = getActivity()
                 .getSharedPreferences(sharedPreferences, getActivity().MODE_PRIVATE);
-        logged = settings.getBoolean(getResources().getString(R.string.sp_Logged), false);
+        user.setLoggedUsuario(settings.getBoolean(getResources().getString(R.string.sp_Logged), false));
         user.setUsuarioId(
                 settings.getInt(getResources().getString(R.string.sp_UsuarioId),0)
         );
@@ -377,5 +384,28 @@ public class DownloadFragment extends Fragment {
         tilPeriodo.setClickable(accion);
         btnDownload.setEnabled(accion);
         btnDownload.setClickable(accion);
+    }
+
+    private void SaveLocalPeriodo(cPeriodos periodo){
+        String sharedPref = getString(R.string.SATRA_PREFERENCES);
+        SharedPreferences settings = getActivity().getSharedPreferences(sharedPref,
+                getActivity().MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(getString(R.string.sp_PeriodoId), periodo.getPeriodoId());
+        editor.putString("FechaInicio", periodo.getFechaInicio());
+        editor.putString("FechaFin", periodo.getFechaFin());
+        editor.commit();
+    }
+
+    //Obtener Periodo de SharedPreferences
+    private cPeriodos getLocalPeriodo(){
+        cPeriodos per = new cPeriodos();
+        String sharedPreferences = getResources().getString(R.string.SATRA_PREFERENCES);
+        SharedPreferences settings = getActivity()
+                .getSharedPreferences(sharedPreferences, getActivity().MODE_PRIVATE);
+        per.setPeriodoId(settings.getInt(getResources().getString(R.string.sp_PeriodoId), 0));
+        per.setFechaInicio(settings.getString("FechaInicio", ""));
+        per.setFechaFin(settings.getString("FechaFin", ""));
+        return per;
     }
 }

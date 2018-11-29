@@ -9,6 +9,7 @@ public class mCheckIn {
     private dDetallePlanSemanal dDetallePlanSemanal;
     private String Incidencias;
     private String FotoIncidencia;
+    private String FotoRutaLocal;
     private String ImageData;
     private String State;
     private String UUID;
@@ -17,6 +18,8 @@ public class mCheckIn {
         RowId = 0;
         UsuarioCreacionId = 0;
         dDetallePlanSemanal = new dDetallePlanSemanal();
+        FotoIncidencia = "";
+        ImageData = "";
     }
 
     public int getRowId() {
@@ -101,5 +104,13 @@ public class mCheckIn {
 
     public void setUUID(String UUID) {
         this.UUID = UUID;
+    }
+
+    public String getFotoRutaLocal() {
+        return FotoRutaLocal;
+    }
+
+    public void setFotoRutaLocal(String fotoRutaLocal) {
+        FotoRutaLocal = fotoRutaLocal;
     }
 }

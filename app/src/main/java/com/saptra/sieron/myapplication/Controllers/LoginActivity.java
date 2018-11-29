@@ -107,6 +107,21 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         //Si respuesta correcta, obener datos
                         if (response.body().getDatos().getUsuarioId() > 0) {
+                            if(response.body().getDatos().getLoggedUsuario()) {
+                                pvProgress.setVisibility(View.GONE);
+                                Snackbar.make(clMensajes,
+                                        "Sesión abierta desde otro dispositivo. " +
+                                                "Cierre las sesiones abiertas desde su perfil web de SAPTRA"
+                                        , Snackbar.LENGTH_INDEFINITE)
+                                        .setAction("ACEPTAR", new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                            }
+                                        }).show();
+                                return;
+                            }
+                            //Notificar sesión abierta
+                            PostSession(response.body().getDatos().getUsuarioId(), true);
                             //Guardar datos de cobrador en SharedPreferences
                             SaveSharedPreferencesUsuario(response.body().getDatos());
                             Toast.makeText(getApplication(),
@@ -221,5 +236,30 @@ public class LoginActivity extends AppCompatActivity {
             e1.printStackTrace();
         }
         return password;
+    }
+
+    public void PostSession(int UsuarioId, boolean logged){
+
+        try {
+            Call<HttpObjectResponse<mUsuarios>> logout = ServicioApi.PostSession(UsuarioId, logged);
+            logout.enqueue(new Callback<HttpObjectResponse<mUsuarios>>() {
+                @Override
+                public void onResponse(Call<HttpObjectResponse<mUsuarios>> call,
+                                       Response<HttpObjectResponse<mUsuarios>> response) {
+                    if (response.isSuccessful()) {
+                        Log.e("PostSession","Sesión cerrada");
+                    } else {
+                        Log.e("PostSession", "No se cerró sesión");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<HttpObjectResponse<mUsuarios>> call, Throwable t) {
+                    Log.e("PostSession", "Error: " + t.getMessage());
+                }
+            });
+        } catch (Exception ex) {
+            Log.e("PostSession", "Error: " + ex.getLocalizedMessage());
+        }
     }
 }

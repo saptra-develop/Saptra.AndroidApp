@@ -30,17 +30,22 @@ public interface ServiceApi {
 
     //WebApi
     //public static final String BASE_URL = "http://apisaptra.gear.host/";
-    //public static final String BASE_URL = "http://200.33.114.167/saptraWebApi/";
+    public static final String BASE_URL = "http://200.33.114.167/saptraWebApi/";
 
     //virtual device
     //public static final String BASE_URL = "http://192.168.226.2:45455/";
 
     //physical device
-    public static final String BASE_URL = "http://localhost:57680/";
+    //public static final String BASE_URL = "http://localhost:57680/";
 
     //mUsuarios
     @POST("Saptra/Usuario/GetLogin")
     Call<HttpObjectResponse<mUsuarios>> GetLogin(@Body mUsuarios usuario);
+
+    //Planeacion
+    @POST("Saptra/Usuario/PostSession")
+    Call<HttpObjectResponse<mUsuarios>> PostSession(
+            @Query("UsuarioId")int UsuarioId, @Query("Logged")boolean Logged);
 
     //Periodo
     @GET("Saptra/Periodo/GetPeriodo")

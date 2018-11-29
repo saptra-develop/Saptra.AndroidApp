@@ -4,6 +4,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,8 @@ import org.w3c.dom.Text;
 public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
 
     public TextInputLayout tilActividad, tilDescripcion, tilFecha, tilHora, tilCheckIn, tilLugar;
-    public TextView txvPeriodo, txvCertificados;
+    public TextView txvPeriodo;
+    public Button btnCertificados;
     public FloatingActionButton btnCheck;
     public View parentView, llyCertificados;
 
@@ -31,7 +33,7 @@ public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
         tilCheckIn = (TextInputLayout) itemView.findViewById(R.id.tilCheckIn);
         tilLugar = (TextInputLayout) itemView.findViewById(R.id.tilLugar);
         btnCheck = (FloatingActionButton) itemView.findViewById(R.id.btnCheck);
-        txvCertificados = (TextView) itemView.findViewById(R.id.txvCertificados);
+        btnCertificados = (Button) itemView.findViewById(R.id.btnCertificados);
         parentView = (RelativeLayout) itemView.findViewById(R.id.rlItem);
         llyCertificados = itemView.findViewById(R.id.llyCertificado);
 
@@ -48,7 +50,7 @@ public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        txvCertificados.setOnClickListener(new View.OnClickListener() {
+        btnCertificados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int position = getAdapterPosition();

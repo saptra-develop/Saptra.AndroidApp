@@ -59,8 +59,6 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         holder.tilLugar.getEditText().setText(lstDetPlanSem.get(position).getLugarActividad());
         holder.tilCheckIn.getEditText().setText(checks+" / "+TotalChecks);
 
-        holder.txvCertificados.setMovementMethod(LinkMovementMethod.getInstance());
-
         //Validar si ya tiene check-in
         if(checks == TotalChecks){
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.magenta_gto));

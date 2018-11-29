@@ -25,7 +25,6 @@ public class PhotoPreview extends AppCompatActivity {
     //Others
     private int DetallePlanId = 0;
     private String mCurrentPhotoPath = "", certificado = "";
-    private Bitmap bImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +38,7 @@ public class PhotoPreview extends AppCompatActivity {
 
         imvPreview = (ImageView) findViewById(R.id.imvPreview);
         tlbPreview = (android.support.v7.widget.Toolbar) findViewById(R.id.tlbPreview);
-        tlbPreview.setTitle("Viste Previa");
+        tlbPreview.setTitle("Vista Previa");
         setSupportActionBar(tlbPreview);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -49,9 +48,6 @@ public class PhotoPreview extends AppCompatActivity {
         certificado = getIntent().getStringExtra("certificado");
 
         mCheckIn checkIn = mCheckInData.getInstance(this).getCheckInsDetallePlan(DetallePlanId, certificado);
-        if(checkIn.getCheckInId() != null && checkIn.getImageData().length() > 0) {
-            bImage = Globals.getInstance().Base64ToBitmap(checkIn.getImageData());
-        }
 
         if(!mCurrentPhotoPath.equals("")){
             Picasso.with(this).load(Uri.parse(mCurrentPhotoPath))
@@ -60,8 +56,12 @@ public class PhotoPreview extends AppCompatActivity {
                     .centerCrop()
                     .into(imvPreview);
         }
-        else if(bImage != null){
-            imvPreview.setImageBitmap(bImage);
+        else if(!checkIn.getFotoIncidencia().equals("")){
+            Picasso.with(this).load(Uri.parse(checkIn.getFotoIncidencia()))
+                    .placeholder(getResources().getDrawable(R.drawable.ic_preview))
+                    .fit()
+                    .centerCrop()
+                    .into(imvPreview);
         }
     }
 

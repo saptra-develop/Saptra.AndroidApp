@@ -209,7 +209,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Check-In"
+                        android:hint="Registrar"
                         android:focusable="false"
                         android:textColor="@color/magenta_gto"/>
                 </android.support.design.widget.TextInputLayout>
@@ -266,6 +266,7 @@
                     android:orientation="horizontal"
                     android:layout_alignParentLeft="true"
                     android:paddingLeft="16dp"
+                    android:paddingRight="4dp"
                     android:paddingBottom="2dp"
                     android:gravity="center_vertical">
 
@@ -275,13 +276,15 @@
                         android:src="@drawable/ic_file"
                         android:paddingRight="16dp"/>
 
-                    <TextView
-                        android:id="@+id/txvCertificados"
+                    <Button
+                        android:id="@+id/btnCertificados"
+                        android:background="?android:attr/selectableItemBackground"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/str_certificados"
                         android:textColor="@color/cyan_gto"
-                        android:clickable="true"/>
+                        android:clickable="true"
+                        android:textAllCaps="false"/>
                 </LinearLayout>
 
 

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import java.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -40,8 +39,10 @@ import com.rey.material.widget.Button;
 import com.rey.material.widget.FloatingActionButton;
 import com.rey.material.widget.ProgressView;
 import com.saptra.sieron.myapplication.BuildConfig;
+import com.saptra.sieron.myapplication.Data.cPeriodosData;
 import com.saptra.sieron.myapplication.Data.mCheckInData;
 import com.saptra.sieron.myapplication.Data.mLecturaCertificadosData;
+import com.saptra.sieron.myapplication.Models.cPeriodos;
 import com.saptra.sieron.myapplication.Models.dDetallePlanSemanal;
 import com.saptra.sieron.myapplication.Models.mCheckIn;
 import com.saptra.sieron.myapplication.Models.mLecturaCertificados;
@@ -92,13 +93,13 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     private mUsuarios user;
     private dDetallePlanSemanal model;
     private String certificado = "";
-    private mCheckIn checkIn;
+    private mCheckIn checkIn = new mCheckIn();
     private File photoFile;
 
     //Geolocalization
     private String lattitude ="", longitude="";
     private Location mLocation = null;
-    private GoogleApiClient mGoogleApiClient = null;
+    private static GoogleApiClient mGoogleApiClient = null;
     private LocationManager mLocationManager = null;
     private LocationRequest mLocationRequest = null;
     private final String TAG = "CheckInActivity";
@@ -128,7 +129,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
          *******************************************/
         pvProgress = (ProgressView) findViewById(R.id.pvProgress);
         tlbCheckIn = (android.support.v7.widget.Toolbar) findViewById(R.id.tlbCheckIn);
-        tlbCheckIn.setSubtitle("Check-In");
+        tlbCheckIn.setSubtitle("Registro");
         setSupportActionBar(tlbCheckIn);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -160,14 +161,12 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 .build();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         checkLocation();
-        /***********************************************************/
 
         /********************************************
          *      ACTIVIDAD A MOSTRAR
          *******************************************/
         try {
             user = new mUsuarios();
-            checkIn = new mCheckIn();
             user = getLoggedUser();
             String _model = getIntent().getStringExtra("model");
             model = new Gson().fromJson(_model, dDetallePlanSemanal.class);
@@ -207,9 +206,13 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                         tilIncidencia.getEditText().setFocusable(false);
                         tilIncidencia.getEditText().setText(checkIn.getIncidencias());
                         tilBarCode.getEditText().setText(certificado);
-                        Bitmap img = Globals.getInstance().Base64ToBitmap(checkIn.getImageData());
-                        if (img != null) {
-                            civPreview.setImageBitmap(img);
+                        if (checkIn.getFotoIncidencia() != null) {
+                            Picasso.with(this).load(Uri.parse(checkIn.getFotoIncidencia() ))
+                                    .placeholder(getResources().getDrawable(R.drawable.ic_preview))
+                                    .fit()
+                                    .centerCrop()
+                                    .into(civPreview);
+                            civPreview.setBorderColorResource(R.color.azul_gto);
                         }
                     }
                 }
@@ -236,14 +239,6 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 if(cameraIntent.resolveActivity(getPackageManager()) != null){
                     try{
-                        if(photoFile != null){
-                            try {
-                                photoFile.delete();
-                            }
-                            catch (Exception e){
-                                Log.e("FOTO", "ERROR:"+e.getLocalizedMessage());
-                            }
-                        }
                         photoFile = null;
                         photoFile = createImageFile();
                     }
@@ -270,7 +265,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         civPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mCurrentPhotoPath.equals("") || !checkIn.getImageData().equals("")) {
+                if(!mCurrentPhotoPath.equals("") || !checkIn.getFotoIncidencia().equals("")) {
                     Intent intent = new Intent(CheckInActivity.this, PhotoPreview.class);
                     intent.putExtra("CurrentPhotoPath", mCurrentPhotoPath);
                     intent.putExtra("DetallePlanId", model.getDetallePlanId());
@@ -293,7 +288,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                     }
                     new AlertDialog.Builder(CheckInActivity.this)
                             .setTitle("AVISO")
-                            .setMessage("Se realizará check-in a la actividad actual, continuar?")
+                            .setMessage("Se registrará a la actividad actual, continuar?")
                             .setPositiveButton("ACEPTAR", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -317,7 +312,8 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                             .show();
                 }
                 catch (Exception ex){
-                    Log.e("btnCheckIn", ex.getMessage());
+                    Toast.makeText(getApplication(),
+                            "Error:"+ex.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -419,9 +415,9 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                     break;
                 case CAMERA_REQUEST :
                     try {
-                        mImageBitmap = MediaStore.Images.Media
-                                .getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
-                        mImageBitmap = Globals.getInstance().getResizedBitmap(this, Uri.parse(mCurrentPhotoPath).getPath());
+                        //mImageBitmap = MediaStore.Images.Media
+                        //      .getBitmap(this.getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                        //mImageBitmap = Globals.getInstance().getResizedBitmap(this, Uri.parse(mCurrentPhotoPath).getPath());
                         //civPreview.setImageBitmap(mImageBitmap);
                         Picasso.with(this).load(Uri.parse(mCurrentPhotoPath))
                                 .placeholder(getResources().getDrawable(R.drawable.ic_preview))
@@ -441,8 +437,8 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             METHODS
      /******************************************************************************/
     private void GenerateCheckIn(){
-        byte[] bFile;
-        String base64File = "";
+        //byte[] bFile;
+        //String base64File = "";
         mLecturaCertificados certificado = null;
         String checkID = "", certificadoID = "";
         long rowCheckID = 0, rowCertificadoID = 0;
@@ -458,17 +454,15 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 }
             });
 
-            if(mImageBitmap != null) {
-                bFile = Globals.getInstance().bitmapToByte(mImageBitmap);
-                base64File = Globals.getInstance().ByteArrayToB64Sring(bFile);
-            }
             checkID = UUID.randomUUID().toString();
             checkIn.setCheckInId(checkID);
             checkIn.getDetallePlan().setDetallePlanId(model.getDetallePlanId());
-            checkIn.setImageData(base64File);
+            checkIn.setImageData("");
+            checkIn.setFotoIncidencia(mCurrentPhotoPath);
             checkIn.setUsuarioCreacionId(user.getUsuarioId());
             checkIn.setCoordenadas(lattitude+","+longitude);
             checkIn.setIncidencias(tilIncidencia.getEditText().getText().toString());
+
             if(RequiereCertificado(model)){
                 certificado = new mLecturaCertificados();
                 certificado.setFolioCertificado(tilBarCode.getEditText().getText().toString());
@@ -477,7 +471,11 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             String _UUID = user.getUsuarioId()+UUID.randomUUID().toString();
             checkIn.setUUID(_UUID);
             checkIn.setState("I");
+
+            //Insertar Check-In
+            //****************************************************************
             rowCheckID = mCheckInData.getInstance(this).createCheckIn(checkIn);
+
             if(rowCheckID > 0 && certificado != null){
                 certificado.getCheckIn().setCheckInId(checkID);
                 certificado.setUUID(_UUID);
@@ -488,7 +486,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 @Override
                 public void run() {
                     pvProgress.setVisibility(View.GONE);
-                    Snackbar.make(clMensajes, "Check-in correcto!"
+                    Snackbar.make(clMensajes, "Registro correcto!"
                             , Snackbar.LENGTH_INDEFINITE)
                             .setAction("ACEPTAR", new View.OnClickListener() {
                                 @Override
@@ -512,6 +510,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                                 public void onClick(View view) {
                                 }
                             }).show();
+
                     HabilitarControles(true);
                 }
             });
@@ -530,6 +529,23 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         if(model.getDetallePlanId() == 0){
             showToastMessage("La actividad no es válida");
             validacion = false;
+            return  validacion;
+        }
+        else
+            validacion = true;
+
+        //VALIDAR SI SE PUEDE DAR CHECK-IN A ACTIVIDAD DENTRO DEL PERIODO
+        Date currentDate = Globals.getInstance().StringToDate(Globals.getInstance().getShortDate());
+        cPeriodos periodo = cPeriodosData.getInstance(this).getCurrentPeriodo();
+        Date limitDate = Globals.getInstance().StringToDate(periodo.getFechaFin());
+
+        //Si currentDate > limitDate
+        if(limitDate.compareTo(currentDate)<0){
+            Toast.makeText(getApplication(),
+                    "Imposible registrar actividad en un periodo vencido.",
+                    Toast.LENGTH_LONG).show();
+            validacion = false;
+            return  validacion;
         }
         else
             validacion = true;
@@ -539,6 +555,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         if(lattitude.equals("") || longitude.equals("")) {
             showToastMessage("No se puede obtener su ubicación, verifique su gps");
             validacion = false;
+            return  validacion;
         }
         else
             validacion = true;
@@ -550,6 +567,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 showToastMessage("No se han leído ningún código");
                 tilBarCode.setError("No se han leído ningún código");
                 validacion = false;
+                return  validacion;
             }
             else {
                 tilBarCode.setErrorEnabled(false);
@@ -580,8 +598,8 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
 
     private boolean isLocationEnabled() {
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) /* ||
+                mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)*/;
     }
 
     private boolean checkLocation() {
@@ -615,15 +633,14 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
 
     private File createImageFile() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
+        String imageFileName = user.getUsuarioId()+UUID.randomUUID().toString();
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        /*File image = File.createTempFile(
                 imageFileName,
                 ".jpg",
                 storageDir
-        );
+        );*/
+        File image = new File(storageDir+File.separator+imageFileName+".jpeg");
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
@@ -717,16 +734,6 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         long checks = mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId);
         int TotalChecks = model.getCantidadCheckIn();
         txvChecks.setText(checks + "/" + TotalChecks);
-
-        //Borrar última foto tomada
-        if(photoFile != null){
-            try {
-                photoFile.delete();
-            }
-            catch (Exception e){
-                Log.e("FOTO", "ERROR:"+e.getLocalizedMessage());
-            }
-        }
     }
 
     public void HabilitarControles(boolean accion){

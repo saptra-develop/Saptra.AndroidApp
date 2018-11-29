@@ -11,11 +11,13 @@ public class mUsuarios {
     private String ApellidosUsuario;
     private cTipoFiguras cTipoFiguras1;
     private String EmailUsuario;
+    private boolean LoggedUsuario;
 
     public mUsuarios(){
         UsuarioId = 0;
         EstatusId = 0;
         cTipoFiguras1 = new cTipoFiguras();
+        LoggedUsuario = false;
     }
 
     public int getUsuarioId() {
@@ -88,5 +90,13 @@ public class mUsuarios {
 
     public void setTipoFiguras(cTipoFiguras cTipoFiguras1) {
         this.cTipoFiguras1 = cTipoFiguras1;
+    }
+
+    public boolean getLoggedUsuario() {
+        return LoggedUsuario;
+    }
+
+    public void setLoggedUsuario(boolean loggedUsuario) {
+        LoggedUsuario = loggedUsuario;
     }
 }

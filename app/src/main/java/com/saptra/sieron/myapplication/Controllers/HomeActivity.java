@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
 
         try {
 
-            startService(new Intent(this, SynchronizerService.class));
+            //startService(new Intent(this, SynchronizerService.class));
             Calendar cal = Calendar.getInstance();
             Intent intent = new Intent(this, SynchronizerService.class);
             PendingIntent pintent = PendingIntent
@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
             AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             // Start service every hour
             alarm.setInexactRepeating(AlarmManager.RTC, cal.getTimeInMillis(),
-                    (1000 * 60 * 3), pintent);
+                    (1000 * 60 * 1), pintent);
         }
         catch (Exception e){
             Toast.makeText(getApplication(),
@@ -248,10 +248,22 @@ public class HomeActivity extends AppCompatActivity {
                         String sharedPreferences = getResources().getString(R.string.SATRA_PREFERENCES);
                         SharedPreferences settings = getApplication()
                                 .getSharedPreferences(sharedPreferences, getApplication().MODE_PRIVATE);
-                        settings.edit().clear().commit();
+                        //Obtener id de usuario logout
+                        int Usuario = settings.getInt(getString(R.string.sp_UsuarioId), 0);
+
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putInt(getString(R.string.sp_UsuarioIdLoggOut), Usuario);
+                        editor.putInt(getString(R.string.sp_UsuarioId), 0);
+                        editor.putString(getString(R.string.sp_ApellidosUsuario), "");
+                        editor.putString(getString(R.string.sp_EmailUsuario), "");
+                        editor.putString(getString(R.string.sp_TipoFigura), "");
+                        editor.putBoolean(getString(R.string.sp_Logged), false);
+                        editor.commit();
+
                         Intent intent = new Intent(getApplication(), LoginActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        finish();
                     }
                 })
                 .setNegativeButton("CANCELAR", new DialogInterface.OnClickListener() {

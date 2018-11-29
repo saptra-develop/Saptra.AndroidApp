@@ -9,6 +9,8 @@
     <string name="sp_TipoFigura">TipoFigura</string>
     <string name="sp_EmailUsuario">EmailUsuario</string>
     <string name="sp_Logged">Logged</string>
+    <string name="sp_PeriodoId">PeriodoId</string>
+    <string name="sp_UsuarioIdLoggOut">UsuarioId</string>
 
     <!--Menu SideBar-->
     <string name="str_home">Inicio</string>

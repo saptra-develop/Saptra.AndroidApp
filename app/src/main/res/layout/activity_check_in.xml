@@ -321,10 +321,11 @@
 
                         <TextView
                             android:id="@+id/txvChecks"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
                             android:background="@drawable/shape_label_checkin"
-                            android:text="0/1"
+                            android:text="10/10"
+                            android:textSize="12sp"
                             android:gravity="center"
                             android:textColor="@color/cpb_white"
                             app:layout_anchor="@+id/llyHeader"
@@ -350,7 +351,7 @@
                     android:id="@+id/btnCheckIn"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:text="Check-In"
+                    android:text="Registrar"
                     app:rd_enable="true"
                     style="@style/LoginButton"
                     app:rd_style="@style/LoginBtnStyle"

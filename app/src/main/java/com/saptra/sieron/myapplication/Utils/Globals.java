@@ -7,11 +7,16 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.telephony.mbms.FileInfo;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -45,9 +50,27 @@ public class Globals {
 
     public String getDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                "yyyy-MM-dd", Locale.getDefault());
         Date date = new Date();
         return dateFormat.format(date);
+    }
+
+    public String getShortDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
+
+    public Date StringToDate(String date){
+        Date d = null;
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            d = sdf.parse(date);
+        }catch(Exception ex){
+            Log.e("StringToDate", "Error:" +ex.getLocalizedMessage());
+        }
+        return  d;
     }
 
     //Valida si disposiivo está conectado a internet
@@ -58,9 +81,97 @@ public class Globals {
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
+    //Convert file to base64
+    public String FileToBase64(Context c, String path){
+        String base64File = "";
+        try{
+            byte[] bFile;
+            Bitmap mImageBitmap = GetResizedBitmap(c, Uri.parse(path).getPath());
+            if(mImageBitmap != null) {
+                bFile = BitmapToByte(mImageBitmap);
+                base64File = ByteArrayToB64Sring(bFile);
+            }
+        }catch (Exception ex){
+            Log.e("FileToBase64", "Error:"+ex.getLocalizedMessage());
+            Toast.makeText(c,
+                    "FileToBase64 Error:"+ex.getLocalizedMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+        return base64File;
+    }
+
+    //Convert Base64 to file
+    public String GetPathFromBase64(Context c, String base64Img, String pathfile){
+        String path = "";
+        try{
+            String [] _file = pathfile.split("/");
+            String filename = _file[_file.length-1];
+            byte[] bFile = Base64.decode(base64Img, Base64.DEFAULT);
+            File storageDir = c.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+            File image = new File(storageDir.getAbsolutePath()+File.separator+filename);
+
+            if (!image.exists()) {
+                //write the bytes in file
+                FileOutputStream fo = new FileOutputStream(image);
+                //image.createNewFile();
+                fo.write(bFile);
+                // remember close de FileOutput
+                fo.close();
+            }
+            path = "file:" + image.getAbsolutePath();
+        }
+        catch (Exception ex){
+            Log.e("GetPathFromBase64", "Error:"+ex.getLocalizedMessage());
+            Toast.makeText(c,
+                    "GetPathFromBase64 Error:"+ex.getLocalizedMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+        return  path;
+    }
+
+    //Drop exist file
+    public boolean DropFile(String path){
+        boolean result = false;
+        try{
+            path = path.replace("file:","");
+            File file = new File(path);
+            if(file.exists()) {
+                file.delete();
+                result = true;
+            }
+        }
+        catch (Exception ex){
+            Log.e("DropFile", "Error:"+ex.getLocalizedMessage());
+            result = false;
+        }
+        return result;
+    }
+
+    //Drop All Files from current Session
+    public void DropAllFile(Context c){
+        try{
+            int dropedFiles = 0;
+            File storageDir = c.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            if(storageDir.exists()){
+                String [] files = storageDir.list();
+                for(String file : files){
+                    if(file.toLowerCase().contains(".jpeg")) {
+                        new File(file).delete();
+                        dropedFiles++;
+                    }
+                }
+                Log.e("DropAllFile", "DropedFiles:"+dropedFiles);
+            }
+        }
+        catch (Exception ex){
+            Log.e("DropAllFile", "Error:"+ex.getLocalizedMessage());
+        }
+    }
+
     //Convert Bitmap to Byte[]
     // Bitmap to byte[]
-    public byte[] bitmapToByte(Bitmap bitmap) {
+    public byte[] BitmapToByte(Bitmap bitmap) {
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             //bitmap to byte[] stream
@@ -75,7 +186,7 @@ public class Globals {
         return null;
     }
 
-    public static String getCurrentDateTime(){
+    public static String GetCurrentDateTime(){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         return dateFormat.format(date);
@@ -94,9 +205,9 @@ public class Globals {
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
-    public Bitmap getResizedBitmap(Context c, String path) {
+    public Bitmap GetResizedBitmap(Context c, String path) {
 
-        Log.e("getBitmap", "uri:"+path);
+        Log.e("GetResizedBitmap", "uri:"+path);
         Uri uri = Uri.fromFile(new File(path));
         InputStream in = null;
         try {
