@@ -538,11 +538,20 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         Date currentDate = Globals.getInstance().StringToDate(Globals.getInstance().getShortDate());
         cPeriodos periodo = cPeriodosData.getInstance(this).getCurrentPeriodo();
         Date limitDate = Globals.getInstance().StringToDate(periodo.getFechaFin());
+        Date activityDate = Globals.getInstance().StringToDate(model.getFechaActividad());
 
         //Si currentDate > limitDate
         if(limitDate.compareTo(currentDate)<0){
             Toast.makeText(getApplication(),
                     "Imposible registrar actividad en un periodo vencido.",
+                    Toast.LENGTH_LONG).show();
+            validacion = false;
+            return  validacion;
+        }
+        //Si currentDate > activityDate
+        else if(activityDate.compareTo(currentDate)<0){
+            Toast.makeText(getApplication(),
+                    "Imposible registrar actividad. Fuera de tiempo.",
                     Toast.LENGTH_LONG).show();
             validacion = false;
             return  validacion;
