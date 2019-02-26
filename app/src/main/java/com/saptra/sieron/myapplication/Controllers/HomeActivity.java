@@ -253,7 +253,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         SharedPreferences.Editor editor = settings.edit();
                         editor.putInt(getString(R.string.sp_UsuarioIdLoggOut), Usuario);
-                        editor.putInt(getString(R.string.sp_UsuarioId), 0);
+                        editor.putInt(getString(R.string.sp_UsuarioId), Usuario);
                         editor.putString(getString(R.string.sp_ApellidosUsuario), "");
                         editor.putString(getString(R.string.sp_EmailUsuario), "");
                         editor.putString(getString(R.string.sp_TipoFigura), "");

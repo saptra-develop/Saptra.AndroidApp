@@ -20,6 +20,7 @@ public class mCheckIn {
         dDetallePlanSemanal = new dDetallePlanSemanal();
         FotoIncidencia = "";
         ImageData = "";
+        FotoRutaLocal = "";
     }
 
     public int getRowId() {

@@ -44,7 +44,7 @@ public class mCheckInData {
         values.put(dbh.CHK_COORDENADAS, ci.getCoordenadas());
         values.put(dbh.CHK_DETALLE_PLAN_ID, ci.getDetallePlan().getDetallePlanId());
         values.put(dbh.CHK_INCIDENCIAS, ci.getIncidencias());
-        if(ci.getState().equals("S")){
+        if(ci.getState().equals("S") && ci.getFotoRutaLocal() != ""){
             String path = Globals.getInstance().GetPathFromBase64(context, ci.getImageData(), ci.getFotoRutaLocal());
             values.put(dbh.CHK_FOTO_INCIDENCIA, path);
         }

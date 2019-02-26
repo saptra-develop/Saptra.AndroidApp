@@ -265,7 +265,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         civPreview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!mCurrentPhotoPath.equals("") || !checkIn.getFotoIncidencia().equals("")) {
+                if(!mCurrentPhotoPath.equals("") || checkIn.getFotoIncidencia() != null) {
                     Intent intent = new Intent(CheckInActivity.this, PhotoPreview.class);
                     intent.putExtra("CurrentPhotoPath", mCurrentPhotoPath);
                     intent.putExtra("DetallePlanId", model.getDetallePlanId());
@@ -459,6 +459,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             checkIn.getDetallePlan().setDetallePlanId(model.getDetallePlanId());
             checkIn.setImageData("");
             checkIn.setFotoIncidencia(mCurrentPhotoPath);
+            checkIn.setFotoRutaLocal(mCurrentPhotoPath);
             checkIn.setUsuarioCreacionId(user.getUsuarioId());
             checkIn.setCoordenadas(lattitude+","+longitude);
             checkIn.setIncidencias(tilIncidencia.getEditText().getText().toString());
@@ -549,7 +550,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             return  validacion;
         }
         //Si currentDate > activityDate
-        else if(activityDate.compareTo(currentDate)<0){
+        else if(activityDate.compareTo(currentDate) != 0 ){
             Toast.makeText(getApplication(),
                     "Imposible registrar actividad. Fuera de tiempo.",
                     Toast.LENGTH_LONG).show();
