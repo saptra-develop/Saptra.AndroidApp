@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         //Si respuesta correcta, obener datos
                         if (response.body().getDatos().getUsuarioId() > 0) {
+                            /*
                             if(response.body().getDatos().getLoggedUsuario()) {
                                 pvProgress.setVisibility(View.GONE);
                                 Snackbar.make(clMensajes,
@@ -120,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }).show();
                                 return;
                             }
+                            */
                             //Notificar sesión abierta
                             PostSession(response.body().getDatos().getUsuarioId(), true);
                             //Guardar datos de cobrador en SharedPreferences

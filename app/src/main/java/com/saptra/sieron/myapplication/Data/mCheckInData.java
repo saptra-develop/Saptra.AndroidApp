@@ -90,6 +90,18 @@ public class mCheckInData {
     }
 
     /***************************************************************************
+     * BUSCAR SI EXISTE CERTIFICADO
+     ***************************************************************************/
+    public long ExistsCertificado(String certificado) {
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        long rows = DatabaseUtils.queryNumEntries(db, dbh.TBL_LECTURA_CERTIFICADOS,
+                dbh.LCR_FOLIO_CERTIFICADO + "=?",
+                new String[]{"" + certificado});
+        Log.e("ExistsCertificado", "rows:" + rows);
+        return rows;
+    }
+
+    /***************************************************************************
      * GET CHECK-INS POR ACTIVIDAD PLAN SEMANAL
      ***************************************************************************/
     public mCheckIn getCheckInsDetallePlan(int DetallePlanId, String certificado){
@@ -202,7 +214,7 @@ public class mCheckInData {
         }
         catch(Exception ex){
             remove = 0;
-            Log.e("updateCliente", "Error: "+ex.getMessage());
+            Log.e("deleteCheckInRow", "Error: "+ex.getMessage());
         }
         return  remove;
     }

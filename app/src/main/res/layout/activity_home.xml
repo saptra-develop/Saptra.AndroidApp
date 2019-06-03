@@ -45,6 +45,18 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/menu_navigation"
         android:background="@drawable/grd_background_grey"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_app"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:textColor="@color/colorPrimary"
         />
+
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

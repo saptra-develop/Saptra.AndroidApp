@@ -90,7 +90,8 @@ public class dDetallePlanSemanalData {
                 " JOIN "+ dbh.TBL_PLAN_SEMANAL+" B on A."+dbh.DPS_PLAN_SEMANAL_ID+" = B."+dbh.PLS_PLAN_SEMANAL_ID+
                 " JOIN "+dbh.TBL_PERIODOS+" C on B."+dbh.PLS_PERIODO_ID+" = C."+dbh.PER_PERIODO_ID+
                 " JOIN "+dbh.TBL_TIPO_ACTIVIDADES+" D on A."+ dbh.DPS_TIPO_ACTIVIDAD_ID+ " = D."+dbh.TIA_TIPO_ACTIVIDAD_ID+
-                " WHERE C."+dbh.PER_PERIODO_ID+" = "+PeriodoId
+                " WHERE C."+dbh.PER_PERIODO_ID+" = "+PeriodoId+
+                        " ORDER BY A."+dbh.DPS_FECHA_ACTIVIDAD+", A."+dbh.DPS_HORA_ACTIVIDAD
                 , null);
         Log.e("getDetPlanSemanal", ""+c.getCount());
         try{

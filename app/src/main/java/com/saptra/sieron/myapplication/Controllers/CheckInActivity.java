@@ -144,7 +144,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         tilBarCode = (TextInputLayout) findViewById(R.id.tilBarCode);
         tilIncidencia = (TextInputLayout) findViewById(R.id.tilIncidencia);
         clMensajes = (CoordinatorLayout) findViewById(R.id.clMensajes);
-        tilBarCode.getEditText().setKeyListener(null);
+        //tilBarCode.getEditText().setKeyListener(null);
         btnCheckIn = (Button) findViewById(R.id.btnCheckIn);
         llyCertificado = findViewById(R.id.llyCertificado);
         llyCertificado.setVisibility(View.GONE);
@@ -205,6 +205,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                         //mostrar indicencia registrada
                         tilIncidencia.getEditText().setFocusable(false);
                         tilIncidencia.getEditText().setText(checkIn.getIncidencias());
+                        tilBarCode.getEditText().setFocusable(false);
                         tilBarCode.getEditText().setText(certificado);
                         if (checkIn.getFotoIncidencia() != null) {
                             Picasso.with(this).load(Uri.parse(checkIn.getFotoIncidencia() ))
@@ -550,13 +551,13 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
             return  validacion;
         }
         //Si currentDate > activityDate
-        else if(activityDate.compareTo(currentDate) != 0 ){
+        /*else if(activityDate.compareTo(currentDate) != 0 ){
             Toast.makeText(getApplication(),
                     "Imposible registrar actividad. Fuera de tiempo.",
                     Toast.LENGTH_LONG).show();
             validacion = false;
             return  validacion;
-        }
+        }*/
         else
             validacion = true;
 
@@ -572,12 +573,19 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
 
         //VALIDAR LECTURA DE CERTIFICADO
         if(RequiereCertificado(model)){
-            if(tilBarCode.getEditText().getText().toString().equals("")){
+            String barcode = tilBarCode.getEditText().getText().toString();
+            if(barcode.equals("")){
                 tilBarCode.setErrorEnabled(true);
-                showToastMessage("No se han leído ningún código");
-                tilBarCode.setError("No se han leído ningún código");
+                showToastMessage("No se ha leído o ingresado ningún código");
+                tilBarCode.setError("No se ha leído ningún código");
                 validacion = false;
                 return  validacion;
+            }
+            else if(ExisteCertificado(barcode) > 0){
+                showToastMessage("Este certificado ya fue leìdo");
+                tilBarCode.setError("Este certificado ya fue leìdo\"");
+                validacion = false;
+                return validacion;
             }
             else {
                 tilBarCode.setErrorEnabled(false);
@@ -721,6 +729,10 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         return requerido;
     }
 
+    private long ExisteCertificado(String certificado){
+        return mCheckInData.getInstance(getApplication()).ExistsCertificado(certificado);
+    }
+
     private mUsuarios getLoggedUser(){
         mUsuarios user = new mUsuarios();
         String sharedPreferences = getResources().getString(R.string.SATRA_PREFERENCES);
@@ -739,6 +751,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
         btnTakePhoto.setVisibility(View.GONE);
         btnCheckIn.setVisibility(View.GONE);
         tilIncidencia.getEditText().setFocusable(false);
+        tilBarCode.getEditText().setFocusable(false);
         //Actualizar indicador CheckIn´s
         int DetallePlanId = model.getDetallePlanId();
         long checks = mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId);
@@ -749,6 +762,8 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     public void HabilitarControles(boolean accion){
         tilIncidencia.setEnabled(accion);
         tilIncidencia.setClickable(accion);
+        tilBarCode.setEnabled(accion);
+        tilBarCode.setClickable(accion);
         civPreview.setClickable(accion);
         btnScan.setEnabled(accion);
         btnScan.setClickable(accion);

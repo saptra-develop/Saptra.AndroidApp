@@ -64,12 +64,18 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.magenta_gto));
             holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_check_white), false);
         }
+        else{
+            holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.colorAccent));
+            holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_arrow_forward), false);
+        }
         //Si actividad es especial y contiene certificados leidos, mostrar layout
         if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
                 lstDetPlanSem.get(position).getCantidadCheckIn() > 1){
             if(certificados > 0)
                 holder.llyCertificados.setVisibility(View.VISIBLE);
         }
+        else
+            holder.llyCertificados.setVisibility(View.GONE);
     }
 
     @Override
