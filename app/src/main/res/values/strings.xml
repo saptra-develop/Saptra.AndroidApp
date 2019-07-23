@@ -2,7 +2,8 @@
     <string name="app_name">SAPTRA</string>
 
     <!-- version app -->
-    <string name="version_app">V1.0</string>
+    <string name="version_app">V1.1</string>
+    <string name="apk_released">AR-071519</string>
 
     <!--SharedPreferences-->
     <string name="SATRA_PREFERENCES">SP_SAPTRA</string>

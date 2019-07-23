@@ -36,7 +36,7 @@ public interface ServiceApi {
     //public static final String BASE_URL = "http://192.168.226.2:45455/";
 
     //From Mac Os android virtual device
-    //public static final String BASE_URL = "http://192.168.0.8:57680/";
+    //public static final String BASE_URL = "http://192.168.0.7:57680/";
 
     //physical device
     //public static final String BASE_URL = "http://localhost:57680/";

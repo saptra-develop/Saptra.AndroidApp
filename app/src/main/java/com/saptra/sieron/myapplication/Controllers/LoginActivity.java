@@ -21,6 +21,7 @@ import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -228,12 +229,12 @@ public class LoginActivity extends AppCompatActivity {
         MessageDigest mdEnc;
         try {
             mdEnc = MessageDigest.getInstance("MD5");
-            mdEnc.update(pass.getBytes(), 0, pass.length());
-            pass = new BigInteger(1, mdEnc.digest()).toString(16);
-            while (pass.length() < 32) {
-                pass = "0" + pass;
+            byte[] digest = mdEnc.digest(pass.getBytes(Charset.forName("UTF-8")));
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < digest.length; ++i) {
+                sb.append(Integer.toHexString((digest[i] & 0xFF) | 0x100).substring(1, 3));
             }
-            password = pass;
+            password = sb.toString();
         } catch (NoSuchAlgorithmException e1) {
             e1.printStackTrace();
         }

@@ -34,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
                 .start();
 
         final Intent intent = new Intent(this,
-                (user.getUsuarioId() > 0 ) ? HomeActivity.class : LoginActivity.class);
+                user.getLoggedUsuario() ? HomeActivity.class : LoginActivity.class);
 
         TimerTask task = new TimerTask() {
             @Override
@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
         boolean logged;
         SharedPreferences settings = getApplication()
                 .getSharedPreferences(sharedPreferences, getApplication().MODE_PRIVATE);
-        logged = settings.getBoolean(getResources().getString(R.string.sp_Logged), false);
+        user.setLoggedUsuario(settings.getBoolean(getResources().getString(R.string.sp_Logged), false));
         user.setUsuarioId(
                 settings.getInt(getResources().getString(R.string.sp_UsuarioId),0)
         );
