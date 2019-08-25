@@ -61,7 +61,7 @@ public class mLecturaCertificadosData {
         long count = 0;
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor mCount= db.rawQuery(
-                "SELECT COUNT(1)"+
+                "SELECT COUNT(DISTINCT A."+dbh.LCR_UUID+")"+
                     " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
                     " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
                     " JOIN "+ dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
@@ -80,7 +80,7 @@ public class mLecturaCertificadosData {
         ArrayList<mLecturaCertificados> lstCertificado = new ArrayList<mLecturaCertificados>();
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor c = db.rawQuery(
-                " SELECT A.*, B."+dbh.CHK_CHECKIN_ID+ //, "+dbh.CHK_IMAGE_DATA+", "+dbh.CHK_INCIDENCIAS+", "+dbh.CHK_FECHA_CREACION+
+                " SELECT DISTINCT A.*, B."+dbh.CHK_CHECKIN_ID+ //, "+dbh.CHK_IMAGE_DATA+", "+dbh.CHK_INCIDENCIAS+", "+dbh.CHK_FECHA_CREACION+
                         " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
                         " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
                         " JOIN "+dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+

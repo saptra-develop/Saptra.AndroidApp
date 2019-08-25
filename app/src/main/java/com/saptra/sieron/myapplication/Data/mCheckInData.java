@@ -80,13 +80,27 @@ public class mCheckInData {
     /***************************************************************************
      * OBENER CHECK-INS POR ACIVIDAD COUNT
      ***************************************************************************/
-    public long getCheckInRealizados(int DetallePlanId) {
+    /*public long getCheckInRealizados(int DetallePlanId) {
         SQLiteDatabase db = dbh.getReadableDatabase();
         long rows = DatabaseUtils.queryNumEntries(db, dbh.TBL_CHECKIN,
                 dbh.CHK_DETALLE_PLAN_ID + "=?",
                 new String[]{"" + DetallePlanId});
         Log.e("getCheckInRealizados", "rows:" + rows);
         return rows;
+    }*/
+
+    public long getCheckInRealizados(int DetallePlanId) {
+        long count = 0;
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor mCount= db.rawQuery(
+                " SELECT COUNT(DISTINCT "+dbh.CHK_UUID+")"+
+                     " FROM "+dbh.TBL_CHECKIN+
+                     " WHERE "+dbh.CHK_DETALLE_PLAN_ID+" = "+DetallePlanId
+                , null);
+        mCount.moveToFirst();
+        count= mCount.getInt(0);
+        mCount.close();
+        return count;
     }
 
     /***************************************************************************
@@ -108,7 +122,7 @@ public class mCheckInData {
         mCheckIn CheckIn = new mCheckIn();
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor c = db.rawQuery(
-                " SELECT A.*"+
+                " SELECT DISTINCT A.*"+
                         " FROM "+dbh.TBL_CHECKIN +" A "+
                         " JOIN "+ dbh.TBL_DETALLE_PLAN_SEMANAL +" B on A."+dbh.CHK_DETALLE_PLAN_ID+" = B."+dbh.DPS_DETALLE_PLAN_ID+
                         " LEFT JOIN "+ dbh.TBL_LECTURA_CERTIFICADOS +" C on A."+dbh.CHK_CHECKIN_ID+" = C."+dbh.LCR_CHECKIN_ID+
@@ -146,7 +160,7 @@ public class mCheckInData {
         List<mLecturaCertificados> noEnviados = new ArrayList<mLecturaCertificados>();
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor c = db.rawQuery(
-                " SELECT "+
+                " SELECT DISTINCT "+
                         " A."+dbh.CHK_CHECKIN_ID+", A."+dbh.CHK_DETALLE_PLAN_ID+", A."+dbh.CHK_FECHA_CREACION+" CHK_F_C"
                         +", A."+dbh.CHK_USUARIO_CREACION_ID+" CHK_USER, A."+dbh.CHK_IMAGE_DATA+", A."+dbh.CHK_INCIDENCIAS
                         +", A."+dbh.CHK_COORDENADAS+", A."+dbh.CHK_UUID+" CHK_UUID, A."+dbh.CHK_STATE+" CHK_STATE,"+
