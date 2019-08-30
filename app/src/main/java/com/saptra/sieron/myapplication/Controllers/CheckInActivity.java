@@ -723,7 +723,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
     private boolean RequiereCertificado(dDetallePlanSemanal actividad){
         boolean requerido = false;
         if(actividad.getTipoActividades().getActividadEspecial() &&
-                actividad.getCantidadCheckIn() > 1){
+                actividad.getCantidadCheckIn() > 0){
             requerido = true;
         }
         return requerido;
