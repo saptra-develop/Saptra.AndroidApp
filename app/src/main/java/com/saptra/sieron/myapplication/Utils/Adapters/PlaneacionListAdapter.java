@@ -48,19 +48,42 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         Log.d("TRANCER", "en onBindViewHolder**");
         //BIND DATA
         int DetallePlanId = lstDetPlanSem.get(position).getDetallePlanId();
-        long checks = mCheckInData.getInstance(c).getCheckInRealizados(DetallePlanId);
-        int TotalChecks = lstDetPlanSem.get(position).getCantidadCheckIn();
+        Long Checks = new Long(mCheckInData.getInstance(c).getCheckInRealizados(DetallePlanId)+"");
+        Long TotalChecks = new Long(lstDetPlanSem.get(position).getCantidadCheckIn()+"");
+        boolean bloquearChecking = false;
         long certificados = mLecturaCertificadosData.getInstance(c).getCertificadosCount(DetallePlanId);
+
         holder.txvPeriodo.setText(lstDetPlanSem.get(position).getPlanSemanal().getPeriodos().getDecripcionPeriodo());
         holder.tilActividad.getEditText().setText(lstDetPlanSem.get(position).getTipoActividades().getNombreActividad());
         holder.tilDescripcion.getEditText().setText(lstDetPlanSem.get(position).getDescripcionActividad());
         holder.tilFecha.getEditText().setText(lstDetPlanSem.get(position).getFechaActividad().substring(0,10));
         holder.tilHora.getEditText().setText(lstDetPlanSem.get(position).getHoraActividad().substring(0,5));
         holder.tilLugar.getEditText().setText(lstDetPlanSem.get(position).getLugarActividad());
-        holder.tilCheckIn.getEditText().setText(checks+" / "+TotalChecks);
+        holder.tilCheckIn.getEditText().setText(Checks+" / "+TotalChecks);
+
+        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()){
+
+        }
+
+        //Si actividad es especial y contiene certificados leidos, mostrar layout
+        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
+                lstDetPlanSem.get(position).getCantidadCheckIn() > 0){
+            if(certificados > 0)
+                holder.llyCertificados.setVisibility(View.VISIBLE);
+        }
+        else
+            holder.llyCertificados.setVisibility(View.GONE);
+
+        //Validar si la actividad contiene sus respectivos checkings
+        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()) {
+            bloquearChecking = Checks >= TotalChecks;
+        }
+        else {
+            bloquearChecking = mCheckInData.getInstance(c).CheckingRealizado(DetallePlanId);
+        }
 
         //Validar si ya tiene check-in
-        if(checks == TotalChecks){
+        if(bloquearChecking){
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.magenta_gto));
             holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_check_white), false);
         }
@@ -68,14 +91,6 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.colorAccent));
             holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_arrow_forward), false);
         }
-        //Si actividad es especial y contiene certificados leidos, mostrar layout
-        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
-                lstDetPlanSem.get(position).getCantidadCheckIn() > 1){
-            if(certificados > 0)
-                holder.llyCertificados.setVisibility(View.VISIBLE);
-        }
-        else
-            holder.llyCertificados.setVisibility(View.GONE);
     }
 
     @Override

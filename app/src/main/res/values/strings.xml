@@ -3,7 +3,7 @@
 
     <!-- version app -->
     <string name="version_app">V1.3</string>
-    <string name="apk_released">AR-280819</string>
+    <string name="apk_released">AR-200919</string>
 
     <!--SharedPreferences-->
     <string name="SATRA_PREFERENCES">SP_SAPTRA</string>

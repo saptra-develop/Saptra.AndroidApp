@@ -174,11 +174,12 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 certificado = getIntent().getStringExtra("certificado").equals("")
                         ? "" : getIntent().getStringExtra("certificado");
             }
-            int DetallePlanId = model.getDetallePlanId();
-            long checks = mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId);
-            int TotalChecks = model.getCantidadCheckIn();
 
+            int DetallePlanId = model.getDetallePlanId();
+            Long TotalChecks = new Long(model.getCantidadCheckIn());
+            Long checks = new Long(mCheckInData.getInstance(getApplication()).getCheckInRealizados(DetallePlanId));
             txvChecks.setText(checks + "/" + TotalChecks);
+            boolean bloquearChecking = false;
 
             if (model != null) {
                 txvActividad.setText(model.getTipoActividades().getNombreActividad());
@@ -189,12 +190,17 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                 //Ocultar / Mostrar Lector de Certificados
                 if (RequiereCertificado(model)) {
                     llyCertificado.setVisibility(View.VISIBLE);
+                    //Ocultar controles se se han realizados los checkings necesarios
+                    bloquearChecking = ((checks >= TotalChecks) || !certificado.equals(""));
                 } else {
                     llyCertificado.setVisibility(View.GONE);
+                    //Ocultar controles si se ha realizado el checking de la checks
+                    bloquearChecking = mCheckInData.getInstance(getApplication())
+                                    .CheckingRealizado(DetallePlanId);
                 }
 
-                //Cantidad CheckIns completo, ocultar controles
-                if (checks == TotalChecks || !certificado.equals("")) {
+                //Ocultar controles
+                if (bloquearChecking) {
                     checkIn = mCheckInData.getInstance(getApplication())
                             .getCheckInsDetallePlan(DetallePlanId, certificado);
                     if (checkIn.getCheckInId() != ""    ) {
