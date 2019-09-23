@@ -103,13 +103,28 @@ public class mCheckInData {
         return count;
     }
 
-    public boolean CheckingRealizado(int DetallePlanId) {
+    public boolean getCheckingRealizado(int DetallePlanId) {
         long count = 0;
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor mCount= db.rawQuery(
                 " SELECT COUNT(1)"+
                         " FROM "+dbh.TBL_CHECKIN+
                         " WHERE "+dbh.CHK_DETALLE_PLAN_ID+" = "+DetallePlanId
+                , null);
+        mCount.moveToFirst();
+        count= mCount.getInt(0);
+        mCount.close();
+        return count > 0;
+    }
+
+    public boolean IsCheckingEnviado(int DetallePlanId) {
+        long count = 0;
+        SQLiteDatabase db = dbh.getReadableDatabase();
+        Cursor mCount= db.rawQuery(
+                " SELECT COUNT(1)"+
+                        " FROM "+dbh.TBL_CHECKIN+
+                        " WHERE "+dbh.CHK_STATE+" = 'S' "+
+                        " AND "+dbh.CHK_DETALLE_PLAN_ID+" = "+DetallePlanId
                 , null);
         mCount.moveToFirst();
         count= mCount.getInt(0);

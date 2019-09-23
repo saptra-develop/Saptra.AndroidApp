@@ -17,7 +17,7 @@ import org.w3c.dom.Text;
 public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
 
     public TextInputLayout tilActividad, tilDescripcion, tilFecha, tilHora, tilCheckIn, tilLugar;
-    public TextView txvPeriodo;
+    public TextView txvPeriodo, txvEstatusEnvio;
     public Button btnCertificados;
     public FloatingActionButton btnCheck;
     public View parentView, llyCertificados;
@@ -36,6 +36,7 @@ public class PlaneacionListViewHolder extends RecyclerView.ViewHolder {
         btnCertificados = (Button) itemView.findViewById(R.id.btnCertificados);
         parentView = (RelativeLayout) itemView.findViewById(R.id.rlItem);
         llyCertificados = itemView.findViewById(R.id.llyCertificado);
+        txvEstatusEnvio = (TextView) itemView.findViewById(R.id.txvEstatusEnvio);
 
         llyCertificados.setVisibility(View.GONE);
         parentView = itemView;

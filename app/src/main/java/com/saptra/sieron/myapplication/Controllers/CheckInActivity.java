@@ -196,7 +196,7 @@ public class CheckInActivity extends AppCompatActivity implements GoogleApiClien
                     llyCertificado.setVisibility(View.GONE);
                     //Ocultar controles si se ha realizado el checking de la checks
                     bloquearChecking = mCheckInData.getInstance(getApplication())
-                                    .CheckingRealizado(DetallePlanId);
+                                    .getCheckingRealizado(DetallePlanId);
                 }
 
                 //Ocultar controles

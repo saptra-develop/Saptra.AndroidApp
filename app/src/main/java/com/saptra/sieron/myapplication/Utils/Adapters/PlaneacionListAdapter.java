@@ -51,7 +51,11 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         Long Checks = new Long(mCheckInData.getInstance(c).getCheckInRealizados(DetallePlanId)+"");
         Long TotalChecks = new Long(lstDetPlanSem.get(position).getCantidadCheckIn()+"");
         boolean bloquearChecking = false;
-        long certificados = mLecturaCertificadosData.getInstance(c).getCertificadosCount(DetallePlanId);
+        boolean IsEnviado = mCheckInData.getInstance(c).IsCheckingEnviado(DetallePlanId);
+        Long CertificadosEnviados = new Long(mLecturaCertificadosData.getInstance(c)
+                .getCertificadosEnviadosCount(DetallePlanId));
+        long certificados = mLecturaCertificadosData.getInstance(c)
+                .getCertificadosCount(DetallePlanId);
 
         holder.txvPeriodo.setText(lstDetPlanSem.get(position).getPlanSemanal().getPeriodos().getDecripcionPeriodo());
         holder.tilActividad.getEditText().setText(lstDetPlanSem.get(position).getTipoActividades().getNombreActividad());
@@ -60,26 +64,27 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         holder.tilHora.getEditText().setText(lstDetPlanSem.get(position).getHoraActividad().substring(0,5));
         holder.tilLugar.getEditText().setText(lstDetPlanSem.get(position).getLugarActividad());
         holder.tilCheckIn.getEditText().setText(Checks+" / "+TotalChecks);
-
-        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()){
-
-        }
+        holder.txvEstatusEnvio.setText(IsEnviado ? "Sincronizado: correcto" : "Sincronizado: en cola");
 
         //Si actividad es especial y contiene certificados leidos, mostrar layout
         if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
                 lstDetPlanSem.get(position).getCantidadCheckIn() > 0){
             if(certificados > 0)
                 holder.llyCertificados.setVisibility(View.VISIBLE);
+
+            //Mostrar cantidad de certificados enviados
+            holder.txvEstatusEnvio.setText("Certificados sincronizados: "+CertificadosEnviados+ "/" +TotalChecks);
         }
         else
             holder.llyCertificados.setVisibility(View.GONE);
 
-        //Validar si la actividad contiene sus respectivos checkings
+        //Validar si la actividad contiene sus respectivos checkings (solo especiales)
         if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()) {
             bloquearChecking = Checks >= TotalChecks;
         }
+        //Para actividades que no sean especiales
         else {
-            bloquearChecking = mCheckInData.getInstance(c).CheckingRealizado(DetallePlanId);
+            bloquearChecking = mCheckInData.getInstance(c).getCheckingRealizado(DetallePlanId);
         }
 
         //Validar si ya tiene check-in
