@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 import com.rey.material.widget.Button;
 import com.rey.material.widget.ProgressView;
@@ -19,12 +20,9 @@ import com.saptra.sieron.myapplication.Models.mUsuarios;
 import com.saptra.sieron.myapplication.R;
 import com.saptra.sieron.myapplication.Utils.Globals;
 import com.saptra.sieron.myapplication.Utils.Interfaces.ServiceApi;
-
-import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +69,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                tilUsuario.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
+                tilContrasena.getEditText().onEditorAction(EditorInfo.IME_ACTION_DONE);
+                //Ocultar keyboard despues de hacer click
                 if(!Globals.getInstance().isOnline(getApplication())){
                     Snackbar.make(clMensajes,
                             "Sin conexión a internet",

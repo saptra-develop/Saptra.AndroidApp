@@ -64,19 +64,6 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
         holder.tilHora.getEditText().setText(lstDetPlanSem.get(position).getHoraActividad().substring(0,5));
         holder.tilLugar.getEditText().setText(lstDetPlanSem.get(position).getLugarActividad());
         holder.tilCheckIn.getEditText().setText(Checks+" / "+TotalChecks);
-        holder.txvEstatusEnvio.setText(IsEnviado ? "Sincronizado: correcto" : "Sincronizado: en cola");
-
-        //Si actividad es especial y contiene certificados leidos, mostrar layout
-        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
-                lstDetPlanSem.get(position).getCantidadCheckIn() > 0){
-            if(certificados > 0)
-                holder.llyCertificados.setVisibility(View.VISIBLE);
-
-            //Mostrar cantidad de certificados enviados
-            holder.txvEstatusEnvio.setText("Certificados sincronizados: "+CertificadosEnviados+ "/" +TotalChecks);
-        }
-        else
-            holder.llyCertificados.setVisibility(View.GONE);
 
         //Validar si la actividad contiene sus respectivos checkings (solo especiales)
         if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial()) {
@@ -96,6 +83,36 @@ public class PlaneacionListAdapter extends RecyclerView.Adapter<PlaneacionListVi
             holder.btnCheck.setBackgroundColor(c.getResources().getColor(R.color.colorAccent));
             holder.btnCheck.setIcon(c.getResources().getDrawable(R.drawable.ic_arrow_forward), false);
         }
+
+        /*---------------------------------------------------------
+                Mostrar mensaje para notificar si checking
+                de actividad ya fue enviado
+         ---------------------------------------------------------*/
+
+        holder.txvEstatusEnvio.setText("Actividad sincronizada: "+
+                (IsEnviado ? "Si" : "No"));
+        //Cambiar color de estatus de envio de checking
+        holder.llyEstatusEnvio.setBackgroundResource(
+                IsEnviado ? R.color.md_green_200 : R.color.md_grey_200);
+
+        //Si actividad es especial y contiene certificados leidos, mostrar layout
+        if(lstDetPlanSem.get(position).getTipoActividades().getActividadEspecial() &&
+                lstDetPlanSem.get(position).getCantidadCheckIn() > 0){
+            if(certificados > 0)
+                //Mostrar layout para leer certificado
+                holder.llyCertificados.setVisibility(View.VISIBLE);
+
+            //Mostrar cantidad de certificados enviados
+            holder.txvEstatusEnvio.setText("Actividades sincronizadas: "+CertificadosEnviados+ "/" +TotalChecks);
+            //Cambiar color de estatus de envio de checking
+            holder.llyEstatusEnvio.setBackgroundResource(
+                    ((CertificadosEnviados.equals(TotalChecks))) ? R.color.md_green_200 :
+                            (CertificadosEnviados > 0 && CertificadosEnviados < TotalChecks ? R.color.md_yellow_200 :
+                                    R.color.md_grey_200));
+        }
+        else
+            //Ocultar layout para leer certificado
+            holder.llyCertificados.setVisibility(View.GONE);
     }
 
     @Override

@@ -93,7 +93,7 @@ public class PlaningFragment extends Fragment {
             rvwDetPlanSem.setAdapter(planeacionListAdapter);
         }
         else{
-            Toast.makeText(getContext(), "No se obuvo información", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "No se obtuvo información", Toast.LENGTH_LONG).show();
         }
         return view;
     }

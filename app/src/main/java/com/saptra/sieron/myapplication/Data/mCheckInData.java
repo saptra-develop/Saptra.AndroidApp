@@ -93,7 +93,7 @@ public class mCheckInData {
         long count = 0;
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor mCount= db.rawQuery(
-                " SELECT COUNT(DISTINCT "+dbh.CHK_UUID+")"+
+                " SELECT COUNT(1)"+
                      " FROM "+dbh.TBL_CHECKIN+
                      " WHERE "+dbh.CHK_DETALLE_PLAN_ID+" = "+DetallePlanId
                 , null);

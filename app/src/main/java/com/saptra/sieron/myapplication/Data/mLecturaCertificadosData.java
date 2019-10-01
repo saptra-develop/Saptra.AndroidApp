@@ -61,7 +61,7 @@ public class mLecturaCertificadosData {
         long count = 0;
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor mCount= db.rawQuery(
-                "SELECT COUNT(DISTINCT A."+dbh.LCR_UUID+")"+
+                "SELECT COUNT(A."+dbh.LCR_FOLIO_CERTIFICADO+")"+
                     " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
                     " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
                     " JOIN "+ dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
@@ -80,7 +80,7 @@ public class mLecturaCertificadosData {
         long count = 0;
         SQLiteDatabase db = dbh.getReadableDatabase();
         Cursor mCount= db.rawQuery(
-                "SELECT COUNT(DISTINCT A."+dbh.LCR_UUID+")"+
+                "SELECT COUNT(A."+dbh.LCR_FOLIO_CERTIFICADO+")"+
                         " FROM "+dbh.TBL_LECTURA_CERTIFICADOS +" A "+
                         " JOIN "+ dbh.TBL_CHECKIN +" B on A."+dbh.LCR_CHECKIN_ID+" = B."+dbh.CHK_CHECKIN_ID+
                         " JOIN "+ dbh.TBL_DETALLE_PLAN_SEMANAL+" C on C."+dbh.DPS_DETALLE_PLAN_ID +" = B."+dbh.CHK_DETALLE_PLAN_ID+
